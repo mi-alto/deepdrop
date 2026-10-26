@@ -12,14 +12,15 @@ import {
   cleanup,
   type Share,
 } from "../lib/store";
-import { newId } from "../lib/security";
+import { newShareId, newId } from "../lib/security";
+process.env.FILE_ENCRYPTION_KEY = 'a7'.repeat(32);
 test("private storage lifecycle, expiry cleanup and resumable revocation", async () => {
   const dir = await mkdtemp(join(tmpdir(), "deepdrop-unit-"));
   process.env.LOCAL_STORAGE_DIR = dir;
   delete process.env.VERCEL;
   delete process.env.BLOB_READ_WRITE_TOKEN;
   const share: Share = {
-    id: newId(),
+    id: newShareId(),
     filename: "report.pdf",
     size: 4,
     createdAt: Date.now(),
@@ -43,7 +44,7 @@ test("private storage lifecycle, expiry cleanup and resumable revocation", async
     await cleanup();
     assert.equal(await getShare(share.id), null);
     assert.equal((await listShares()).length, 0);
-    const expired = { ...share, id: newId(), expiresAt: Date.now() - 1 };
+    const expired = { ...share, id: newShareId(), expiresAt: Date.now() - 1 };
     await createShare(expired, new Uint8Array([4]));
     assert.equal(await cleanup(), 1);
     assert.equal(await download(expired.id), null);
@@ -58,7 +59,7 @@ test("missing private Blob configuration never falls back on Vercel", async () =
   delete process.env.BLOB_READ_WRITE_TOKEN;
   try {
     await assert.rejects(
-      getShare(newId()),
+      getShare(newShareId()),
       /Store Blob privato non configurato/,
     );
   } finally {

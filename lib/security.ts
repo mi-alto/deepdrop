@@ -6,9 +6,21 @@ import {
   createHash,
 } from "node:crypto";
 import { promisify } from "node:util";
+import { shareAuthenticationTag } from './encryption';
 const scrypt = promisify(scryptCallback);
 export const MAX_FILE = 3 * 1024 * 1024;
 export const ID_RE = /^[A-Za-z0-9_-]{32}$/;
+export const SHARE_ID_RE = /^[A-Za-z0-9_-]{43}$/;
+export function newShareId() {
+  const random = randomBytes(16);
+  return Buffer.concat([random, shareAuthenticationTag(random)]).toString('base64url');
+}
+export function validShareId(id: string): boolean {
+  if (!SHARE_ID_RE.test(id)) return false;
+  const bytes = Buffer.from(id, 'base64url');
+  return bytes.length === 32 && bytes.toString('base64url') === id &&
+    timingSafeEqual(bytes.subarray(16), shareAuthenticationTag(bytes.subarray(0,16)));
+}
 export function newId() {
   return randomBytes(24).toString("base64url");
 }
@@ -45,17 +57,28 @@ export function adminVersion() {
 }
 export async function hashPassword(password: string) {
   const salt = randomBytes(16).toString("hex");
-  const key = (await scrypt(password, salt, 64)) as Buffer;
-  return `scrypt:${salt}:${key.toString("hex")}`;
+  const key = await derivePassword(password, salt, true);
+  return `scrypt-v2:${salt}:${key.toString("hex")}`;
+}
+export function isPasswordHash(encoded: string) {
+  return /^scrypt(?:-v2)?:[a-f0-9]{32}:[a-f0-9]{128}$/.test(encoded);
+}
+function derivePassword(password: string, salt: string, strong: boolean): Promise<Buffer> {
+  if (!strong) return scrypt(password, salt, 64) as Promise<Buffer>;
+  return new Promise((resolve, reject) => {
+    scryptCallback(password, salt, 64, {N: 32768, r: 8, p: 3, maxmem: 64 * 1024 * 1024}, (error, key) => {
+      if (error) reject(error); else resolve(key);
+    });
+  });
 }
 export async function verifyPassword(password: string, encoded: string) {
   if (
     password.length > 256 ||
-    !/^scrypt:[a-f0-9]{32}:[a-f0-9]{128}$/.test(encoded)
+    !isPasswordHash(encoded)
   )
     return false;
   const [, salt, hash] = encoded.split(":");
-  const actual = (await scrypt(password, salt, 64)) as Buffer;
+  const actual = await derivePassword(password, salt, encoded.startsWith('scrypt-v2:'));
   return timingSafeEqual(actual, Buffer.from(hash, "hex"));
 }
 export type Session = {
@@ -63,6 +86,7 @@ export type Session = {
   exp: number;
   version: string;
   id?: string;
+  sessionId?: string;
 };
 export function signSession(data: Session) {
   const body = Buffer.from(JSON.stringify(data)).toString("base64url");
@@ -148,7 +172,7 @@ export function text(form: FormData, key: string, max: number) {
 }
 export function safeFilename(name: string) {
   return (
-    name.replace(/[\\/\u0000-\u001f\u007f]/g, "_").slice(0, 180) || "documento"
+    Array.from(name.toWellFormed().replace(/[\\/\u0000-\u001f\u007f-\u009f\u061c\u200b-\u200f\u2028-\u202e\u2066-\u2069]/g, "_")).slice(0, 180).join('') || "documento"
   );
 }
 export function disposition(name: string) {

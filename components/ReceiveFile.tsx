@@ -1,5 +1,6 @@
 "use client";
 import { FormEvent, useState } from "react";
+import { Icon } from "./Interface";
 export default function ReceiveFile({
   id,
   protected: locked,
@@ -15,7 +16,8 @@ export default function ReceiveFile({
 }) {
   const [unlocked, setUnlocked] = useState(!locked),
     [error, setError] = useState(""),
-    [busy, setBusy] = useState(false);
+    [busy, setBusy] = useState(false),
+    [downloaded, setDownloaded] = useState(false);
   async function unlock(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setBusy(true);
@@ -60,6 +62,7 @@ export default function ReceiveFile({
       link.click();
       link.remove();
       setTimeout(() => URL.revokeObjectURL(url), 30000);
+      setDownloaded(true);
     } catch (e) {
       setError((e as Error).message || "Download non disponibile.");
     } finally {
@@ -67,16 +70,27 @@ export default function ReceiveFile({
     }
   }
   return (
-    <main className="receive-page">
-      <div className="eyebrow">UNA CONDIVISIONE PER TE</div>
-      <h1>{unlocked ? "Il tuo file è qui." : "Un file, solo per te."}</h1>
+    <main id="main-content" className="receive-page">
+      <div className="eyebrow">
+        <span className="tiny-square" /> DESTINAZIONE RAGGIUNTA
+      </div>
+      <h1>{unlocked ? "Il tuo file è pronto." : "Una consegna riservata."}</h1>
       <p>
         {unlocked
-          ? "È tutto pronto. Scaricalo quando vuoi."
-          : "Inserisci la password che hai ricevuto dal mittente."}
+          ? "Un ultimo passaggio e il documento è sul tuo dispositivo."
+          : "Il mittente ha protetto questo file. Inserisci la password per accedere."}
       </p>
       <section className="receive-card">
-        <div className="receive-file-icon">{unlocked ? "↓" : "⌑"}</div>
+        <div className="receive-card-top">
+          <span>DEEPDROP / FILE DELIVERY</span>
+          <span>
+            <span className="tiny-square" />
+            {unlocked ? "PRONTO" : "ACCESSO RICHIESTO"}
+          </span>
+        </div>
+        <div className="receive-file-icon">
+          <Icon name={unlocked ? "file" : "lock"} size={29} />
+        </div>
         <h2>{filename || "Documento riservato"}</h2>
         <p className="receive-meta">
           {size !== null ? `${(size / 1024 / 1024).toFixed(2)} MB · ` : ""}
@@ -87,46 +101,65 @@ export default function ReceiveFile({
             year: "numeric",
           })}
         </p>
+        <div className="receive-divider">
+          {unlocked ? "IL PROSSIMO PASSO È TUO" : "VERIFICA DI ACCESSO"}
+        </div>
         {unlocked ? (
           <button
             className="button"
             disabled={busy}
             onClick={() => void download()}
           >
-            {busy ? "Preparazione del file…" : "Scarica il file"}
-            <span>↓</span>
+            {busy
+              ? "Preparazione del file…"
+              : downloaded
+                ? "Scarica di nuovo"
+                : "Scarica il file"}
+            <Icon name="download" size={18} />
           </button>
         ) : (
           <form onSubmit={unlock}>
             <label htmlFor="password">Password del file</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              maxLength={256}
-              required
-              autoComplete="off"
-              placeholder="Inserisci la password"
-            />
+            <div className="input-with-icon">
+              <Icon name="lock" size={16} />
+              <input
+                id="password"
+                name="password"
+                type="password"
+                maxLength={256}
+                required
+                autoComplete="off"
+                placeholder="La password ricevuta dal mittente"
+              />
+            </div>
             <button className="button" disabled={busy}>
               {busy ? "Verifica in corso…" : "Accedi al file"}
-              <span>→</span>
+              <Icon name="arrow" size={18} />
             </button>
           </form>
         )}
+        {downloaded && !error && (
+          <div className="download-complete" role="status">
+            <Icon name="check" size={15} />
+            Download avviato. Controlla i file del tuo dispositivo.
+          </div>
+        )}
         {error && (
-          <p className="error" role="alert">
+          <p className="error banner" role="alert">
+            <Icon name="shield" size={16} />
             {error}
           </p>
         )}
         <p className="hint">
+          <Icon name={locked ? "lock" : "link"} size={12} />
           {locked
             ? "Condivisione protetta da password"
-            : "Chi possiede questo link può scaricare il file."}
+            : "Chi possiede il link può scaricare il file"}
         </p>
       </section>
       <div className="receive-footnote">
-        ◷ Il link scade automaticamente. I tuoi file restano riservati.
+        <Icon name="clock" size={12} />
+        IL LINK SCADE AUTOMATICAMENTE ALLA DATA INDICATA.
       </div>
     </main>
   );

@@ -7,6 +7,7 @@ import {
   signSession,
   text,
   verifyPassword,
+  validShareId,
 } from "@/lib/security";
 import {
   allowedShare,
@@ -29,9 +30,12 @@ async function handle(request: NextRequest, context: Context) {
       (action === "download" && request.method !== "GET")
     )
       return json({ error: "Non trovato." }, 404);
+    if (!validShareId(id)) throw new HttpError(404, 'Link non disponibile.');
     if (request.method === "POST") {
       csrf(request);
-      await rateLimit(request);
+      await rateLimit(request, `unlock:${id}`);
+    } else {
+      await rateLimit(request, `download:${id}`);
     }
     const share = await getShare(id);
     if (!share || share.expiresAt <= Date.now())
@@ -66,6 +70,7 @@ async function handle(request: NextRequest, context: Context) {
       current.version !== share.version
     )
       throw new HttpError(404, "Questo link non è più disponibile.");
+    if (bytes.length !== current.size) throw new Error('Dimensione oggetto non valida');
     return new NextResponse(new Uint8Array(bytes), {
       headers: {
         "Content-Type": "application/octet-stream",

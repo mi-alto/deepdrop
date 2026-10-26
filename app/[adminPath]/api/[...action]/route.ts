@@ -6,13 +6,15 @@ import {
   form,
   hashPassword,
   HttpError,
-  ID_RE,
+  validShareId,
   MAX_FILE,
   newId,
+  newShareId,
   safeFilename,
   signSession,
   text,
   verifyPassword,
+  isPasswordHash,
 } from "@/lib/security";
 import {
   ADMIN_COOKIE,
@@ -22,7 +24,7 @@ import {
   requireAdmin,
   setCookie,
 } from "@/lib/http";
-import { createShare, deleteShare, listShares } from "@/lib/store";
+import { createShare, deleteShare, listShares, createAdminSession, deleteAdminSession } from "@/lib/store";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 type Context = { params: Promise<{ adminPath: string; action: string[] }> };
@@ -44,26 +46,31 @@ async function handle(request: NextRequest, context: Context) {
     const action = params.action.join("/");
     if (request.method !== "GET") csrf(request);
     if (action === "login" && request.method === "POST") {
-      await rateLimit(request);
+      await rateLimit(request, 'admin-login');
       const password = text(await form(request), "password", 256);
       const hash = process.env.ADMIN_PASSWORD_HASH || "";
-      if (!/^scrypt:[a-f0-9]{32}:[a-f0-9]{128}$/.test(hash))
+      if (!isPasswordHash(hash))
         throw new HttpError(503, "Accesso amministratore non configurato.");
       if (!(await verifyPassword(password, hash)))
         throw new HttpError(401, "Password non corretta.");
       const exp = Date.now() + 8 * 60 * 60 * 1000;
+      const sessionId = newId();
+      const version = adminVersion();
+      const token = signSession({ kind: 'admin', version, exp, sessionId });
+      await createAdminSession({id: sessionId, expiresAt: exp, version});
       const response = json({ ok: true });
       setCookie(
         response,
         ADMIN_COOKIE,
-        signSession({ kind: "admin", version: adminVersion(), exp }),
+        token,
         exp,
         adminPath(),
       );
       return response;
     }
-    requireAdmin(request);
+    const session = await requireAdmin(request);
     if (action === "logout" && request.method === "POST") {
+      await deleteAdminSession(session.sessionId!);
       const response = json({ ok: true });
       setCookie(response, ADMIN_COOKIE, "", 0, adminPath());
       return response;
@@ -76,13 +83,13 @@ async function handle(request: NextRequest, context: Context) {
       if (!(file instanceof File) || !file.size || file.size > MAX_FILE)
         throw new HttpError(400, "Scegli un file da 1 byte a 3 MB.");
       const password = text(data, "password", 256);
-      if (password && password.length < 8)
-        throw new HttpError(400, "La password deve avere almeno 8 caratteri.");
+      if (password && password.length < 12)
+        throw new HttpError(400, "La password deve avere almeno 12 caratteri.");
       const hours = Number(text(data, "hours", 4));
       if (![1, 24, 72, 168, 720].includes(hours))
         throw new HttpError(400, "Scadenza non valida.");
       const share = {
-        id: newId(),
+        id: newShareId(),
         filename: safeFilename(file.name),
         size: file.size,
         createdAt: Date.now(),
@@ -99,7 +106,7 @@ async function handle(request: NextRequest, context: Context) {
       request.method === "DELETE"
     ) {
       const id = params.action[1];
-      if (!ID_RE.test(id)) throw new HttpError(400, "Link non valido.");
+      if (!validShareId(id)) throw new HttpError(400, "Link non valido.");
       await deleteShare(id);
       return json({ ok: true });
     }

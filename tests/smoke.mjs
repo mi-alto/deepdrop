@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { randomBytes, scryptSync } from 'node:crypto';
+import { randomBytes, scryptSync, createCipheriv, createDecipheriv } from 'node:crypto';
 import { spawn } from 'node:child_process';
 import { mkdtemp, readFile, writeFile, rm } from 'node:fs/promises';
 import { createServer } from 'node:net';
@@ -22,12 +22,14 @@ const password = randomBytes(20).toString('hex');
 const salt = randomBytes(16).toString('hex');
 const hash = `scrypt:${salt}:${scryptSync(password, salt, 64).toString('hex')}`;
 const cronSecret = randomBytes(32).toString('hex');
+const encryptionKey = randomBytes(32);
 const child = spawn(process.execPath, ['node_modules/next/dist/bin/next', 'dev', '--hostname', '127.0.0.1', '--port', String(port)], {
   env: {
     ...process.env, NODE_ENV: 'development', NEXT_TELEMETRY_DISABLED: '1',
     VERCEL: '', BLOB_READ_WRITE_TOKEN: '', BLOB_STORE_ID: '', VERCEL_OIDC_TOKEN: '',
     ADMIN_PATH: admin, APP_ORIGIN: origin, ADMIN_PASSWORD_HASH: hash,
     SESSION_SECRET: randomBytes(32).toString('hex'), CRON_SECRET: cronSecret,
+    FILE_ENCRYPTION_KEY: encryptionKey.toString('hex'),
     LOCAL_STORAGE_DIR: storage,
   },
   stdio: ['ignore', 'pipe', 'pipe'],
@@ -78,6 +80,11 @@ try {
   await expectStatus(await request('/admin'), 404, 'No default admin alias');
   await expectStatus(await request('/admin123'), 404, 'Default route disabled when customized');
   await expectStatus(await request(`${admin}/api/shares`), 401, 'Listing requires authentication');
+  await expectStatus(await request(`${admin}/api/shares`, {headers: {
+    'x-middleware-subrequest': 'proxy:proxy:proxy:proxy:proxy',
+    'x-middleware-rewrite': `${origin}${admin}/api/shares`,
+    'x-forwarded-host': 'localhost',
+  }}), 401, 'Forged middleware headers cannot bypass route authorization');
   await expectStatus(await request('/admin123/api/shares'), 404, 'Admin APIs honor custom path');
   await expectStatus(await request('/api/cron/cleanup'), 401, 'Cleanup requires secret');
   await expectStatus(await request(`${admin}/api/login`, {
@@ -99,8 +106,13 @@ try {
   }), 403, 'Cross-origin upload rejected');
 
   const protectedShare = await upload(adminCookie, 'client-password-123');
+  const storedBytes = await readFile(join(storage, 'deepdrop/file', protectedShare.id));
+  assert.equal(storedBytes.subarray(0, 4).toString(), 'DD01');
+  assert.equal(storedBytes.includes(payload), false, 'Stored payload is encrypted');
   const downloadPath = `/api/share/${protectedShare.id}/download`;
   await expectStatus(await request(downloadPath), 401, 'Direct download cannot bypass password');
+  await expectStatus(await request(downloadPath, {method: 'HEAD'}), 404, 'HEAD cannot bypass password');
+  await expectStatus(await request(downloadPath, {headers: {Range:'bytes=0-10'}}), 401, 'Range cannot bypass password');
   const unlockPath = `/api/share/${protectedShare.id}/unlock`;
   await expectStatus(await request(unlockPath, { method: 'POST', body: form({ password: 'client-password-123' }) }), 403, 'Unlock origin enforced');
   await expectStatus(await request(unlockPath, {
@@ -126,9 +138,19 @@ try {
   }), 200, 'Revoke');
   await expectStatus(await request(downloadPath, { headers: { Cookie: shareCookie } }), 404, 'Revocation defeats existing unlock cookie');
   const expiredPath = join(storage, 'deepdrop', 'meta', `${other.id}.json`);
-  const expired = JSON.parse(await readFile(expiredPath, 'utf8'));
+  const storedMeta = await readFile(expiredPath);
+  const metadataName = `deepdrop/meta/${other.id}.json`;
+  const decipher = createDecipheriv('aes-256-gcm', encryptionKey, storedMeta.subarray(4,16));
+  decipher.setAAD(Buffer.from(`deepdrop:v1:${metadataName}`));
+  decipher.setAuthTag(storedMeta.subarray(16,32));
+  const expired = JSON.parse(Buffer.concat([decipher.update(storedMeta.subarray(32)),decipher.final()]).toString());
   expired.expiresAt = Date.now() - 1000;
-  await writeFile(expiredPath, JSON.stringify(expired));
+  // Test fixture update with the known test key; unauthenticated mutations are tested separately.
+  const nonce = randomBytes(12);
+  const cipher = createCipheriv('aes-256-gcm', encryptionKey, nonce);
+  cipher.setAAD(Buffer.from(`deepdrop:v1:${metadataName}`));
+  const updated = Buffer.concat([cipher.update(JSON.stringify(expired)),cipher.final()]);
+  await writeFile(expiredPath, Buffer.concat([Buffer.from('DD01'),nonce,cipher.getAuthTag(),updated]));
   await expectStatus(await request(`/api/share/${other.id}/download`), 404, 'Expired share rejected before password');
   const cleanup = await expectStatus(await request('/api/cron/cleanup', {
     headers: { Authorization: `Bearer ${cronSecret}` },
@@ -148,6 +170,7 @@ try {
     method: 'POST', headers: { Origin: origin, Cookie: adminCookie },
   }), 200, 'Logout');
   assert.match(logout.headers.get('set-cookie'), /expires=Thu, 01 Jan 1970/i);
+  await expectStatus(await request(`${admin}/api/shares`, {headers:{Cookie:adminCookie}}), 401, 'Logged-out admin cookie cannot be replayed');
   console.log('HTTP smoke: custom admin route, authentication, CSRF, upload, password, download, isolation, revocation, expiry, cleanup and limits passed.');
 } catch (error) {
   console.error(output);
