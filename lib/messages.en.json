@@ -199,5 +199,10 @@
   "Servizio temporaneamente non disponibile. Verifica la configurazione o riprova.": "Service temporarily unavailable. Check the configuration or try again.",
   "Protezione accessi non disponibile.": "Access protection is unavailable.",
   "Troppi tentativi. Riprova tra qualche minuto.": "Too many attempts. Try again in a few minutes.",
-  "La tua prossima destinazione": "Your next destination"
+  "La tua prossima destinazione": "Your next destination",
+  "Condivisione file,": "File sharing,",
+  "senza complicazioni.": "without the hassle.",
+  "Il sistema di sharing sviluppato da Deep4IT.": "The file-sharing system developed by Deep4IT.",
+  "Hai ricevuto un link?": "Received a link?",
+  "Aprilo per scaricare il file.": "Open it to download your file."
 }
