@@ -104,3 +104,9 @@ Optionally set `WAF_TARGET_RATE_LIMIT_ID` to a second SDK rule with a higher thr
 ## Interface language
 
 The UI supports English and Italian, including forms, errors, notices, and date formatting. On the first visit it reads the browser’s `Accept-Language` preferences (regional variants and quality weights included); unsupported languages fall back to English. The language selector in the header saves an explicit preference in the `dd_language` cookie for one year. This non-sensitive preference takes precedence over browser detection and does not change share URLs or access permissions.
+
+### First production credential setup
+
+Run `node scripts/setup-production.mjs` in your own terminal. It asks for an administrator password twice without displaying it, then writes `.env.production.secrets` with a scrypt password hash and three independently generated secrets. The file is owner-readable/writable, excluded from Git, and never overwrites an existing setup file. The password itself is not stored.
+
+Import the file yourself into the project's Vercel Environment Variables, selecting **Production only** and sensitive values, then redeploy. Keep a secure backup of the encryption key; do not regenerate it for an existing store. This helper does not upload credentials or modify your deployment.
