@@ -1,3 +1,4 @@
+import { serverTranslation } from "@/lib/locale";
 import { headers } from "next/headers";
 import { NextRequest } from "next/server";
 import { rateLimit } from "@/lib/http";
@@ -12,9 +13,14 @@ export default async function Receive({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const { t } = await serverTranslation();
   const { id } = await params;
   try {
-    if (validShareId(id)) await rateLimit(new NextRequest(`${origin()}/s/${id}`, {headers: await headers()}), `page:${id}`);
+    if (validShareId(id))
+      await rateLimit(
+        new NextRequest(`${origin()}/s/${id}`, { headers: await headers() }),
+        `page:${id}`,
+      );
     const share = await getShare(id);
     if (share && share.expiresAt > Date.now())
       return (
@@ -33,10 +39,15 @@ export default async function Receive({
           <Icon name="clock" />
         </div>
         <div className="eyebrow">
-          <span className="tiny-square" /> TRANSFER IN PAUSA
+          <span className="tiny-square" />
+          {t("TRANSFER IN PAUSA")}
         </div>
-        <h1>Una breve pausa sulla rotta.</h1>
-        <p>Il servizio è temporaneamente non disponibile. Riprova più tardi.</p>
+        <h1>{t("Una breve pausa sulla rotta.")}</h1>
+        <p>
+          {t(
+            "Il servizio è temporaneamente non disponibile. Riprova più tardi.",
+          )}
+        </p>
       </main>
     );
   }
@@ -46,18 +57,19 @@ export default async function Receive({
         <Icon name="clock" />
       </div>
       <div className="eyebrow">
-        <span className="tiny-square" /> CONDIVISIONE TERMINATA
+        <span className="tiny-square" />
+        {t("CONDIVISIONE TERMINATA")}
       </div>
-      <h1>Il link non è più disponibile.</h1>
+      <h1>{t("Il link non è più disponibile.")}</h1>
       <p>
-        Potrebbe essere scaduto o essere stato revocato.
+        {t("Potrebbe essere scaduto o essere stato revocato.")}
         <br />
-        Chiedi al mittente un nuovo link.
+        {t("Chiedi al mittente un nuovo link.")}
       </p>
       <a href="/" className="button secondary">
-        Torna all’inizio <Icon name="arrow" size={16} />
+        {t("Torna all’inizio")} <Icon name="arrow" size={16} />
       </a>
-      <span className="state-reference">DEEPDROP / TRANSFER CLOSED</span>
+      <span className="state-reference">{t("DEEPDROP / TRANSFER CLOSED")}</span>
     </main>
   );
 }

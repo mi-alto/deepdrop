@@ -77,6 +77,16 @@ try {
   assert.ok(ready, 'Development server starts');
   const home = await request('/');
   assert.ok(!(await home.text()).includes(admin), 'Public homepage does not disclose admin URL');
+  const italianHome = await request('/', {headers:{'Accept-Language':'it-IT,it;q=0.9,en;q=0.8'}});
+  const italianHTML = await italianHome.text();
+  assert.match(italianHTML, /<html lang="it"/);
+  assert.ok(italianHTML.includes('Il tuo file.'));
+  const englishHome = await request('/', {headers:{'Accept-Language':'it-IT',Cookie:'dd_language=en'}});
+  const englishHTML = await englishHome.text();
+  assert.match(englishHTML, /<html lang="en"/);
+  assert.ok(englishHTML.includes('Your file.'));
+  const englishLogin = await request(admin,{headers:{'Accept-Language':'en-GB'}});
+  assert.ok((await englishLogin.text()).includes('Sign in to the console'));
   await expectStatus(await request('/admin'), 404, 'No default admin alias');
   await expectStatus(await request('/admin123'), 404, 'Default route disabled when customized');
   await expectStatus(await request(`${admin}/api/shares`), 401, 'Listing requires authentication');

@@ -1,10 +1,10 @@
 # DeepDrop
 
-Una piccola applicazione per distribuire documenti attraverso link dedicati, con scadenza e password facoltativa. Interfaccia italiana, pannello amministratore, nessun database. Next.js e Vercel Blob **privato**.
+A small file-sharing application with dedicated links, expiration dates, and optional passwords. A private admin console, no database, and a responsive interface. Built with Next.js and **private** Vercel Blob storage.
 
-## In locale
+## Local development
 
-Serve Node.js 22 o successivo (CI: Node 24).
+Requires Node.js 22 or later (CI uses Node 24).
 
 ```sh
 npm ci
@@ -13,72 +13,75 @@ npm run password
 openssl rand -hex 32
 ```
 
-Copia il valore `ADMIN_PASSWORD_HASH` generato in `.env.local`; genera **due output distinti** con `openssl rand -hex 32`: uno per `SESSION_SECRET`, uno per `FILE_ENCRYPTION_KEY`. La chiave file è obbligatoria anche in locale e deve avere esattamente 64 caratteri esadecimali. Conservane una copia sicura separata dallo store. Imposta `APP_ORIGIN=http://localhost:3000`, poi avvia:
+Copy the generated `ADMIN_PASSWORD_HASH` into `.env.local`. Generate **two separate values** with `openssl rand -hex 32`: one for `SESSION_SECRET` and another for `FILE_ENCRYPTION_KEY`. The file encryption key is required locally too and must contain exactly 64 hexadecimal characters. Keep a secure backup separate from your storage. Set `APP_ORIGIN=http://localhost:3000`, then start the app:
 
 ```sh
 npm run dev -- --hostname 127.0.0.1
 ```
 
-Apri `http://localhost:3000/admin123`. Il percorso si può cambiare con `ADMIN_PATH=/un-percorso-tuoi`: deve essere un solo segmento di 1–64 lettere ASCII, numeri, trattini o underscore. `/admin`, `/s`, `/api` e `/_next` sono riservati. Nessun link pubblico porta al pannello. Il percorso aggiunge discrezione, mentre l'accesso resta protetto dalla password.
+Open `http://localhost:3000/admin123`. Customize the admin path with `ADMIN_PATH=/your-own-path`: it must be a single segment of 1–64 ASCII letters, digits, hyphens, or underscores. `/admin`, `/s`, `/api`, and `/_next` are reserved. Public pages do not link to the admin console. The custom path adds discretion; password authentication remains the access control.
 
-In sviluppo, senza token Blob, i dati restano nella cartella `.deepdrop/`, esclusa da Git. `LOCAL_STORAGE_DIR` cambia la cartella. Questo adattatore è **disabilitato su Vercel e in produzione**: non vengono salvati file nel filesystem effimero delle Functions. Il limite tentativi WAF non viene simulato localmente.
+During development, without a Blob token, data is stored in `.deepdrop/`, which is excluded from Git. Set `LOCAL_STORAGE_DIR` to change the directory. This adapter is **disabled on Vercel and in production**: uploaded files are never persisted to the ephemeral Functions filesystem. Cloud WAF rate limiting is not simulated locally.
 
-## Pubblicazione su Vercel
+## Deploying to Vercel
 
-1. Importa il repository come progetto Next.js, runtime Node 24.
-2. Crea e collega uno store Vercel Blob scegliendo **Private**. Usa uno store separato per ciascun ambiente: le preview non devono ricevere il token dello store produzione. La piattaforma imposta `BLOB_READ_WRITE_TOKEN`; non aggiungere prefissi `NEXT_PUBLIC_` ai segreti.
-3. Configura le variabili qui sotto. Configura il dominio definitivo in `APP_ORIGIN` e distribuisci l'applicazione.
-4. Configura e pubblica la regola WAF descritta nella prossima sezione. Gli accessi, lo sblocco e la consegna dei file restano chiusi in produzione se la regola manca, fallisce o non risponde entro un secondo.
-5. Verifica un caricamento, uno sblocco con password, un download e una revoca su Vercel. Questi controlli reali sono necessari per verificare anche permessi dello store, WAF e dominio.
+1. Import the repository as a Next.js project using the Node 24 runtime.
+2. Create and connect a Vercel Blob store with **Private** access. Use a separate store for each environment: preview deployments must not receive the production store token. Vercel supplies `BLOB_READ_WRITE_TOKEN`; never prefix secrets with `NEXT_PUBLIC_`.
+3. Configure the variables below. Set the final domain in `APP_ORIGIN` and deploy the application.
+4. Configure and publish the WAF rule described below. In production, authentication, unlocking, and file delivery fail closed if the rule is missing, fails, or does not respond within one second.
+5. Test an upload, a password unlock, a download, and revocation on Vercel. These live checks are necessary to verify storage permissions, the WAF, and the domain configuration.
 
-| Variabile               | Utilizzo                                                                                       |
-| ----------------------- | ---------------------------------------------------------------------------------------------- |
-| `ADMIN_PASSWORD_HASH`   | Hash scrypt ottenuto con `npm run password` (password admin da 12 a 256 caratteri).            |
-| `SESSION_SECRET`        | Segreto casuale separato, almeno 32 caratteri.                                                 |
-| `FILE_ENCRYPTION_KEY`   | Chiave casuale di 32 byte, esattamente 64 caratteri esadecimali; distinta dagli altri segreti. |
-| `ADMIN_PATH`            | Percorso pannello; predefinito `/admin123`. Cambiarlo richiede un nuovo deployment.            |
-| `APP_ORIGIN`            | Origine pubblica esatta HTTPS, senza slash finale o percorsi.                                  |
-| `BLOB_READ_WRITE_TOKEN` | Token dello store Blob **privato**. Solo lato server.                                          |
-| `WAF_RATE_LIMIT_ID`     | Identificativo della regola SDK, ad esempio `deepdrop-auth`.                                   |
-| `CRON_SECRET`           | Segreto casuale di almeno 32 caratteri per la pulizia automatica.                              |
+| Variable                   | Purpose                                                                                                         |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `ADMIN_PASSWORD_HASH`      | scrypt hash generated by `npm run password`; admin passwords must contain 12–256 characters.                    |
+| `SESSION_SECRET`           | A separate random secret with at least 32 characters.                                                           |
+| `FILE_ENCRYPTION_KEY`      | A random 32-byte key represented by exactly 64 hexadecimal characters, separate from other secrets.             |
+| `ADMIN_PATH`               | Admin console path; defaults to `/admin123`. Changing it requires a new deployment.                             |
+| `APP_ORIGIN`               | Exact public HTTPS origin, without a trailing slash or path.                                                    |
+| `BLOB_READ_WRITE_TOKEN`    | Token for the **private** Blob store. Server-side only.                                                         |
+| `WAF_RATE_LIMIT_ID`        | SDK rule identifier, such as `deepdrop-auth`.                                                                   |
+| `WAF_TARGET_RATE_LIMIT_ID` | Optional separate SDK rule for aggregate limits per admin or sharing target; otherwise the main rule is reused. |
+| `CRON_SECRET`              | A random secret with at least 32 characters for scheduled cleanup.                                              |
 
-La build non richiede segreti, così la CI può verificarla senza credenziali. Le operazioni a runtime verificano la configurazione e restano chiuse se manca. In produzione fuori Vercel occorre un'integrazione WAF equivalente: non è previsto un fallback permissivo.
+The build does not require secrets, allowing CI to run without credentials. Runtime operations validate their configuration and fail closed when it is missing. Production hosting outside Vercel requires an equivalent WAF integration; no permissive fallback is provided.
 
-### Limite dei tentativi
+### Rate limiting
 
-Nel progetto Vercel apri **Firewall → Configure → New Rule**. Usa la condizione **@vercel/firewall**, Rate limit ID `deepdrop-auth` (uguale a `WAF_RATE_LIMIT_ID`), azione **Rate Limit**, strategia **Fixed Window**, ad esempio **10 richieste ogni 60 secondi**, chiavi previste dalla condizione SDK (non una generica regola per percorso), risposta **429**. Salva e poi seleziona **Review Changes → Publish**. Non usare l'azione `Log`, che non blocca. Il codice esegue un controllo per IP e un secondo controllo con chiave logica per destinazione: `admin-login`, `unlock:<id>`, `download:<id>` e `page:<id>`. Di default la stessa regola SDK configurata da `WAF_RATE_LIMIT_ID` viene interrogata con queste diverse chiavi; `WAF_TARGET_RATE_LIMIT_ID` permette una soglia aggregata separata. Il secondo controllo limita tentativi distribuiti sulla stessa destinazione; le soglie si applicano anche a richieste legittime. Scegli un limite compatibile con il tuo utilizzo e verifica realmente su Vercel che sia applicato sia per IP sia per chiave applicativa. Un attaccante che conosce un link può consumarne temporaneamente il limite e bloccare utenti legittimi.
+In the Vercel project, open **Firewall → Configure → New Rule**. Select the **@vercel/firewall** condition, use `deepdrop-auth` as the Rate limit ID (matching `WAF_RATE_LIMIT_ID`), select **Rate Limit**, and choose **Fixed Window**. A starting point is **10 requests per 60 seconds**, using the keys supported by the SDK condition rather than a generic path rule, with a **429** response. Save, then select **Review Changes → Publish**. Do not use `Log`, which does not block requests.
 
-Il controllo riguarda login, sblocco, download e apertura delle pagine di condivisione con ID valido. Gli ID casuali o alterati vengono rifiutati prima di leggere Blob. Gli utenti dietro lo stesso IP condividono il limite per IP. I contatori sono gestiti dalla piattaforma, possono avere ambito regionale e non costituiscono un limite globale per persona. Il WAF è un servizio esterno: disponibilità, limiti, quote e costi devono essere controllati nel progetto.
+The application checks the client IP and then a logical target key: `admin-login`, `unlock:<id>`, `download:<id>`, or `page:<id>`. By default, the same SDK rule configured through `WAF_RATE_LIMIT_ID` is queried with these different keys. `WAF_TARGET_RATE_LIMIT_ID` allows a separate aggregate threshold. The second check limits distributed requests against the same target, and thresholds also apply to legitimate requests. Choose limits appropriate for your usage and verify on Vercel that both IP-based and application-key limits are enforced. Someone who knows a link can deliberately exhaust its quota and temporarily block legitimate users.
 
-Il codice controlla sia `rateLimited` sia gli errori SDK (`not-found`, `blocked`), imposta un timeout e usa il dominio fidato di `APP_ORIGIN`, evitando il valore Host ricevuto. Inoltra soltanto gli header IP necessari; cookie, Authorization e header di instradamento arbitrari non vengono inoltrati all’SDK. Le preview protette richiedono **Protection Bypass for Automation** e l'esposizione delle System Environment Variables, come descritto nella [documentazione SDK ufficiale](https://vercel.com/docs/vercel-firewall/vercel-waf/rate-limiting-sdk). Imposta un `APP_ORIGIN` corretto per ciascun ambiente: le richieste da origini diverse sono rifiutate.
+The checks cover login, unlocking, downloads, and valid sharing-page requests. Random or altered IDs are rejected before reading Blob storage. Users behind the same public IP share its limit. Counters are managed by the platform, may be regional, and are not a global limit per person. WAF availability, quotas, limits, and costs must be monitored in your project.
 
-### Pulizia
+The code checks both `rateLimited` and SDK errors (`not-found`, `blocked`), sets a timeout, and uses the trusted domain from `APP_ORIGIN` instead of the incoming Host header. Only necessary IP headers are forwarded; cookies, Authorization, and arbitrary routing headers are not passed to the SDK. Protected preview deployments require **Protection Bypass for Automation** and exposed System Environment Variables, as described in the [official SDK documentation](https://vercel.com/docs/vercel-firewall/vercel-waf/rate-limiting-sdk). Set the correct `APP_ORIGIN` for each environment: requests from other origins are rejected.
 
-`vercel.json` pianifica `/api/cron/cleanup` ogni giorno alle 03:00 UTC. Vercel invia `Authorization: Bearer CRON_SECRET`; senza segreto valido la richiesta è rifiutata. L'esecuzione può essere ritardata secondo il piano Vercel, ma ogni download verifica direttamente la scadenza: la pulizia serve a liberare spazio, non ad applicare il controllo accessi. La pianificazione è per la produzione; in locale o su altre piattaforme usa un scheduler autenticato. Non mettere il segreto nella query string.
+### Cleanup
 
-## Comportamento e protezioni
+`vercel.json` schedules `/api/cron/cleanup` daily at 03:00 UTC. Vercel sends `Authorization: Bearer CRON_SECRET`; requests without the correct secret are rejected. Execution may be delayed depending on the Vercel plan, but every download checks expiration directly. Cleanup frees storage; it does not enforce access expiration. The schedule applies to production. For local development or other hosting, use an authenticated scheduler. Never put the secret in a query string.
 
-- Un file per condivisione, da 1 byte a **3 MiB**. Il limite include un controllo incrementale del corpo multipart prima del parsing, con 64 KiB di margine per il formulario. File di circa 2 MB rientrano nel limite delle richieste Vercel. Scadenze: 1 ora, 24 ore, 3, 7 o 30 giorni.
-- Il link ha un ID base64url canonico di 43 caratteri: 128 bit casuali più un tag HMAC di 128 bit, derivato dalla chiave file con separazione di dominio, e funziona fino alla scadenza o alla revoca. Chi possiede un link senza password può scaricarne il contenuto; invia eventuali password (minimo 12 caratteri) su un canale separato.
-- La password è attiva di default nella console, ma si può disattivare esplicitamente. I nuovi hash usano scrypt con N=32768, r=8, p=3 e salt casuale; nessuna password o hash viene inviato al browser. Per i file protetti il nome resta nascosto fino al download.
-- Sessioni admin firmate con registro persistente cifrato nello store, durata 8 ore, cookie HttpOnly, Secure in produzione, SameSite Strict, limitato al percorso amministrativo. Il logout elimina la sessione dal registro: una copia del vecchio cookie non è più sufficiente per accedere. Cambiare hash admin, `ADMIN_PATH` o `SESSION_SECRET` invalida le sessioni admin. Gli sblocchi durano al massimo un'ora e mai oltre la scadenza del link; sono vincolati all'ID e alla versione casuale della condivisione.
-- Le mutazioni verificano l'header Origin contro `APP_ORIGIN`. Il download ricontrolla autorizzazione, scadenza e metadati attuali; non si affida al solo middleware o all'interfaccia. Nessuna route restituisce URL o token dello store.
-- CSP con nonce per risposta, script e stili limitati in produzione e nessuna dipendenza da font o asset esterni; le autorizzazioni restano nei singoli handler.
-- Cache HTTP disabilitata con `private, no-store`; download come `application/octet-stream`, allegato con nome sanificato e `nosniff`. Nessun contenuto caricato viene servito sotto `public/`.
-- File, manifesti JSON e registri sessione sono cifrati prima della scrittura con AES-256-GCM, nonce casuale di 12 byte e autenticazione del percorso logico. Blob contiene `deepdrop/file/<id>`, `deepdrop/meta/<id>.json` e `deepdrop/session/<session-id>.json`: l’estensione `.json` identifica il contenuto logico, ma i byte memorizzati sono cifrati, anche nell’adattatore locale. Le letture usano `get(..., { access: 'private', useCache: false })`, così le decisioni leggono l'origine e non la cache CDN. La revoca scrive prima una scadenza a zero, elimina il contenuto e infine il manifesto; se una rimozione fallisce, la pulizia ritenta il tombstone. Dopo la scrittura di revoca, i nuovi controlli rifiutano l'accesso; un download già iniziato può terminare e un file già scaricato non può essere ritirato. [Vercel documenta le letture consistenti](https://vercel.com/changelog/vercel-blob-now-supports-consistent-reads-on-private-storage).
-- Nessun contatore download, link monouso, audit persistente o accesso per utenti nominativi. L'elenco e la pulizia leggono i manifesti con paginazione e parallelismo limitato: soluzione per piccoli volumi, da evolvere con molti file. I file non hanno scansione antivirus: il destinatario deve fidarsi del mittente. I limiti di storage e traffico dipendono dal piano Vercel.
+## Behavior and protections
 
-Un crash fra caricamento del file e creazione del manifesto può lasciare un oggetto privato orfano non scaricabile. In quel caso rimuovilo dallo store Vercel: il cron pulisce i manifesti scaduti e le revoche incomplete, non esegue una scansione degli oggetti orfani. Non inserire file riservati nel repository.
+- One file per share, from 1 byte to **3 MiB**. The multipart body is bounded incrementally before parsing, with 64 KiB of form overhead allowed. Files around 2 MB fit within the Vercel request limit. Available lifetimes: 1 hour, 24 hours, 3 days, 7 days, or 30 days.
+- Each sharing link has a canonical 43-character base64url ID: 128 random bits plus a 128-bit HMAC tag derived from the file encryption key with domain separation. The link works until expiration or revocation. Anyone holding a link without a password can download its file. Send passwords, when used, over a separate channel; new passwords require at least 12 characters.
+- Password protection is enabled by default in the console and can be explicitly disabled. New hashes use scrypt with N=32768, r=8, p=3, and a random salt. Neither passwords nor their hashes are sent to the browser. Password-protected filenames remain hidden until download.
+- Admin sessions use signed cookies and an encrypted persistent session registry, with an eight-hour lifetime. Cookies are HttpOnly, Secure in production, SameSite Strict, and scoped to the admin path. Logout removes the session record, so a copied old cookie is no longer sufficient for access. Changing the admin password hash, `ADMIN_PATH`, or `SESSION_SECRET` invalidates admin sessions. Share unlocks last at most one hour and never outlive the link; they are bound to the share ID and its random version.
+- Mutations validate the Origin header against `APP_ORIGIN`. Downloads recheck authorization, expiration, and current metadata rather than relying only on middleware or the interface. No route returns storage URLs or tokens.
+- A per-response nonce CSP limits scripts and styles in production. There are no external font or asset dependencies. Authorization remains inside each route handler.
+- HTTP caching is disabled with `private, no-store`. Downloads use `application/octet-stream`, sanitized attachment filenames, and `nosniff`. Uploaded content is never served from `public/`.
+- Files, JSON manifests, and session records are encrypted before writing with AES-256-GCM, a random 12-byte nonce, and authentication bound to the logical storage path. Blob stores objects at `deepdrop/file/<id>`, `deepdrop/meta/<id>.json`, and `deepdrop/session/<session-id>.json`. The `.json` extension describes the logical content; stored bytes are encrypted, including in the local adapter. Reads use `get(..., { access: 'private', useCache: false })` so authorization decisions read the origin rather than the CDN cache. Revocation first persists an expiration of zero, deletes the file, and then removes the manifest. Cleanup retries incomplete tombstones. After the revocation write, new authorization checks deny access; an already-started download may finish, and downloaded copies cannot be recalled. [Vercel documents consistent reads](https://vercel.com/changelog/vercel-blob-now-supports-consistent-reads-on-private-storage).
+- There are no download counters, one-time links, persistent audit logs, or named recipient accounts. Listing and cleanup read manifests with pagination and bounded concurrency. This is intended for small workloads and needs further development for larger volumes. Files are not scanned for malware: recipients must trust the sender. Storage and transfer limits depend on the Vercel plan.
 
-## Chiave file, backup e compatibilità
+A crash between writing the file and its manifest can leave an inaccessible private orphan. Remove it manually from Vercel storage if necessary. The cron job cleans expired manifests and incomplete revocations; it does not scan for orphaned files. Never commit confidential files to the repository.
 
-La cifratura è **applicativa a riposo, non end-to-end**: il server decifra i file dopo i controlli di accesso. Una compromissione del runtime o delle variabili ambiente può esporre dati e chiavi. Lo store da solo contiene ciphertext autenticati, ma mostra ancora percorsi, dimensioni approssimative e informazioni operative. Non può impedire a chi controlla lo storage di cancellare oggetti o ripristinare vecchie copie valide.
+## Encryption key, backups, and compatibility
 
-`FILE_ENCRYPTION_KEY` protegge file, metadati e registri delle sessioni, e autentica gli ID condivisi. **Perderla rende irrecuperabili i contenuti. Cambiarla senza una migrazione dedicata rende illeggibili gli oggetti esistenti e invalida i link.** Conserva backup sicuri e coordinati dello store e della chiave, in luoghi separati; prova il ripristino in un ambiente isolato. Non inserire chiavi o file riservati nel repository.
+Encryption is **application-level encryption at rest, not end-to-end encryption**. The server decrypts files after checking access. A compromised runtime or environment can expose data and keys. Storage alone contains authenticated ciphertext but still exposes paths, approximate sizes, and operational information. Encryption does not prevent someone controlling storage from deleting objects or restoring older valid copies.
 
-Non c’è una migrazione automatica dai precedenti file in chiaro o dagli ID di 32 caratteri. I vecchi oggetti non vengono accettati come fallback: esporta in modo autorizzato i contenuti dalla vecchia versione e crea nuove condivisioni nell’istanza aggiornata con store separato. I vecchi hash password scrypt restano verificabili, ma i nuovi sono generati nel formato rafforzato `scrypt-v2`.
+`FILE_ENCRYPTION_KEY` protects files, metadata, and session records, and authenticates sharing IDs. **Losing it makes stored content unrecoverable. Changing it without a dedicated migration makes existing objects unreadable and invalidates links.** Keep secure, coordinated backups of storage and the key in separate locations, and test recovery in an isolated environment. Never commit keys or confidential files.
 
-## Verifiche
+There is no automatic migration from earlier plaintext objects or 32-character IDs. Old objects are not accepted through a fallback. Export content through authorized access to the old version, then create new shares in the updated instance with a separate store. Legacy scrypt password hashes remain verifiable, while newly generated hashes use the stronger `scrypt-v2` format.
+
+## Verification
 
 ```sh
 npm test
@@ -88,12 +91,16 @@ npm run test:smoke
 npm audit --omit=dev
 ```
 
-Le suite locali coprono password, firme e rotazione, scadenze, origine, limite corpo, nomi Unicode dei download, errori WAF, cifratura e manomissione degli oggetti, ID autenticati e revoca persistente delle sessioni, oltre al ciclo di vita dello store con revoca riprendibile. Il test HTTP avvia un server reale in sviluppo con store e segreti temporanei e verifica accesso amministrativo, upload, password, download, revoca, scadenza, CSRF, limiti e assenza di segreti nelle risposte. Il funzionamento reale di Blob e WAF richiede anche il controllo su Vercel.
+Local suites cover password derivation, signatures and rotation, expiration, Origin validation, body limits, Unicode download names, WAF errors, encryption and tampering, authenticated IDs, persistent session revocation, and the storage lifecycle with resumable revocation. The HTTP smoke test launches a real development server with temporary storage and secrets. It checks admin access, uploading, password unlocking, downloading, revocation, expiration, CSRF, size limits, and absence of secrets in responses. Actual Blob and WAF behavior also requires verification on Vercel.
 
-Le versioni sono bloccate nel lockfile. L'override `zod@4.6.6` corregge la dipendenza transitiva vulnerabile introdotta da `@vercel/cli-config` attraverso l'SDK Blob; mantenerlo finché la catena upstream non usa una versione corretta.
+Versions are pinned in the lockfile. The `zod@4.6.6` override fixes the vulnerable transitive dependency introduced by `@vercel/cli-config` through the Blob SDK. Keep it until the upstream dependency chain uses a patched version.
 
-La revisione statica e i limiti della valutazione sono descritti in [SECURITY_REVIEW.md](SECURITY_REVIEW.md). Nessuna verifica locale equivale a un penetration test dell’infrastruttura Vercel: l’applicazione non è stata distribuita né verificata su uno store/WAF reale durante questa valutazione.
+The static review and assessment boundaries are documented in [SECURITY_REVIEW.md](SECURITY_REVIEW.md). Local verification is not a penetration test of Vercel infrastructure. During this assessment, the application was not deployed or verified against a real Blob store or WAF configuration.
 
-### Soglia aggregata e disponibilità
+### Aggregate thresholds and availability
 
-Opzionalmente imposta `WAF_TARGET_RATE_LIMIT_ID` su una seconda regola SDK con soglia più alta (per esempio 120/min contro 10/min per IP), se il piano permette una seconda regola. Se non impostata si riusa `WAF_RATE_LIMIT_ID`. Un limite aggregato protegge dalle prove distribuite ma può essere saturato intenzionalmente da chi conosce il percorso admin o un link, bloccando temporaneamente anche gli accessi legittimi. Non disattivare il controllo per aggirare questo errore: valutare allowlist IP sul pannello e soglie adeguate.
+Optionally set `WAF_TARGET_RATE_LIMIT_ID` to a second SDK rule with a higher threshold, such as 120 requests per minute compared with 10 per minute per IP, if your plan supports another rule. Without it, `WAF_RATE_LIMIT_ID` is reused. An aggregate limit helps against distributed attempts, but someone who knows the admin path or a sharing link can intentionally exhaust it, temporarily blocking legitimate access too. Do not disable protection to work around this condition. Consider an IP allowlist for the admin console and appropriate thresholds.
+
+## Interface language
+
+The UI supports English and Italian, including forms, errors, notices, and date formatting. On the first visit it reads the browser’s `Accept-Language` preferences (regional variants and quality weights included); unsupported languages fall back to English. The language selector in the header saves an explicit preference in the `dd_language` cookie for one year. This non-sensitive preference takes precedence over browser detection and does not change share URLs or access permissions.

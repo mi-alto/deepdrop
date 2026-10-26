@@ -128,7 +128,7 @@ svg {
   margin-left: 20px;
 }
 .top-label {
-  font: 9px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 1.65px;
   color: #a6bac4;
   display: flex;
@@ -150,7 +150,7 @@ p {
   margin: 0;
 }
 h1 {
-  font-size: 46px;
+  font-size: 40px;
   font-weight: 550;
   line-height: 1.13;
   letter-spacing: -2px;
@@ -178,29 +178,29 @@ footer {
   margin: 0 4.1%;
   padding: 27px 0;
   border-top: 1px solid var(--line);
-  font-size: 10px;
+  font-size: 12px;
   color: var(--subtle);
 }
 .footer-brand {
-  font: 10px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 2px;
   color: var(--muted);
 }
 .footer-brand > span {
-  font-size: 8px;
+  font-size: 12px;
   color: var(--subtle);
   vertical-align: super;
   margin-left: 5px;
 }
 .footer-lock {
-  font: 8px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 1.2px;
   display: flex;
   align-items: center;
   gap: 7px;
 }
 .eyebrow {
-  font: 9px var(--mono);
+  font: 12px var(--mono);
   color: var(--cyan);
   letter-spacing: 2px;
   display: flex;
@@ -245,7 +245,7 @@ footer {
   display: inline-flex;
   align-items: center;
   gap: 9px;
-  font-size: 11px;
+  font-size: 12px;
   border: 1px solid #33505a;
   border-radius: 4px;
   padding: 12px 16px;
@@ -258,7 +258,7 @@ footer {
 }
 label {
   display: block;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   color: #b9cad2;
   margin-bottom: 10px;
@@ -278,7 +278,7 @@ select {
 }
 input::placeholder {
   color: #728897;
-  font-size: 11px;
+  font-size: 12px;
 }
 input:focus,
 select:focus {
@@ -317,7 +317,7 @@ select:focus {
   border: 1px solid #2b414d;
   color: #bfd2db;
   background: #101d26;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
   white-space: nowrap;
 }
@@ -348,10 +348,10 @@ select:focus {
   gap: 8px;
   align-items: center;
   padding: 5px 0;
-  font-size: 11px;
+  font-size: 12px;
 }
 .hint {
-  font-size: 10px;
+  font-size: 12px;
   color: #849aa8;
   line-height: 1.7;
 }
@@ -362,7 +362,7 @@ select:focus {
   padding: 13px 16px;
   border-radius: 4px;
   margin: 0 0 19px;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.6;
 }
 .banner > span {
@@ -402,7 +402,7 @@ button.danger:hover {
   display: flex;
   align-items: center;
   gap: 8px;
-  font: 8px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 1.5px;
   color: #78919f;
 }
@@ -432,10 +432,10 @@ button.danger:hover {
 }
 .hero .eyebrow {
   margin-bottom: 29px;
-  font-size: 8px;
+  font-size: 12px;
 }
 .hero h1 {
-  font-size: clamp(48px, 5.4vw, 78px);
+  font-size: clamp(32px, 3.5vw, 40px);
   line-height: 1.07;
   letter-spacing: -3.7px;
   font-weight: 550;
@@ -475,13 +475,13 @@ button.danger:hover {
 }
 .hero-instruction strong {
   display: block;
-  font-size: 11px;
+  font-size: 12px;
   color: #d6e6eb;
   font-weight: 500;
 }
 .hero-instruction > div > span {
   display: block;
-  font-size: 10px;
+  font-size: 12px;
   color: #829ca9;
   margin-top: 7px;
 }
@@ -493,7 +493,7 @@ button.danger:hover {
   gap: 12px;
   align-items: center;
   margin-top: 28px;
-  font: 7px var(--mono);
+  font: 12px var(--mono);
   color: #698490;
   letter-spacing: 1px;
 }
@@ -529,7 +529,7 @@ button.danger:hover {
 }
 .graphic-coordinate {
   position: absolute;
-  font: 7px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 1.5px;
   color: #64818d;
 }
@@ -540,7 +540,7 @@ button.danger:hover {
 .coordinate-bottom {
   bottom: 8%;
   right: 13%;
-  font-size: 6px;
+  font-size: 12px;
 }
 .orbit-track {
   transform-origin: 320px 260px;
@@ -555,7 +555,7 @@ button.danger:hover {
   align-items: center;
   justify-content: center;
   color: #7299a5;
-  font: 7px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 1.5px;
   margin-top: -4px;
 }
@@ -585,7 +585,7 @@ button.danger:hover {
   position: absolute;
   right: 23px;
   top: 25px;
-  font: 8px var(--mono);
+  font: 12px var(--mono);
   color: #577381;
 }
 .principles article > .icon {
@@ -597,7 +597,7 @@ button.danger:hover {
   letter-spacing: -0.5px;
 }
 .principles p {
-  font-size: 11px;
+  font-size: 12px;
   margin-top: 10px;
   max-width: 285px;
   line-height: 1.85;
@@ -605,7 +605,7 @@ button.danger:hover {
 .landing-baseline {
   display: flex;
   justify-content: space-between;
-  font: 7px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 1.5px;
   color: #587280;
   margin: 0 0 40px;
@@ -636,12 +636,12 @@ button.danger:hover {
   border-right: 1px solid var(--line);
 }
 .login-story .eyebrow {
-  font-size: 7px;
+  font-size: 12px;
   letter-spacing: 1.5px;
   margin-bottom: 26px;
 }
 .login-story h1 {
-  font-size: 42px;
+  font-size: 40px;
   letter-spacing: -1.9px;
   line-height: 1.17;
 }
@@ -649,7 +649,7 @@ button.danger:hover {
   color: var(--cyan);
 }
 .login-story > p {
-  font-size: 11px;
+  font-size: 12px;
   margin-top: 18px;
   line-height: 1.85;
 }
@@ -664,7 +664,7 @@ button.danger:hover {
   right: 30px;
   display: flex;
   justify-content: space-between;
-  font: 6px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 1px;
   color: #5b7886;
 }
@@ -693,7 +693,7 @@ button.danger:hover {
   letter-spacing: -1px;
 }
 .login-panel > p {
-  font-size: 11px;
+  font-size: 12px;
   margin-top: 10px;
 }
 .login-card {
@@ -716,7 +716,7 @@ button.danger:hover {
   color: #657f8d;
 }
 .login-info p {
-  font-size: 10px;
+  font-size: 12px;
   color: #78909e;
   line-height: 1.65;
 }
@@ -726,7 +726,7 @@ button.danger:hover {
   display: flex;
   gap: 8px;
   align-items: center;
-  font: 6px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 1px;
   color: #5f7b88;
 }
@@ -770,14 +770,14 @@ body:has(.dashboard) footer {
   align-items: center;
   justify-content: space-between;
   padding: 0 11px;
-  font: 8px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 1.4px;
   color: #67818e;
   margin-bottom: 24px;
 }
 .sidebar-title > span {
   color: #416371;
-  font-size: 7px;
+  font-size: 12px;
 }
 .side-nav {
   display: flex;
@@ -788,7 +788,7 @@ body:has(.dashboard) footer {
   border: 1px solid transparent;
   border-radius: 4px;
   margin-bottom: 7px;
-  font-size: 11px;
+  font-size: 12px;
 }
 .side-nav > .icon {
   color: #607f8f;
@@ -815,7 +815,7 @@ body:has(.dashboard) footer {
 .nav-count {
   margin-left: auto;
   color: #72919f;
-  font: 8px var(--mono);
+  font: 12px var(--mono);
   padding: 3px 5px;
   background: #15232c;
   border: 1px solid #263c48;
@@ -831,19 +831,19 @@ body:has(.dashboard) footer {
   margin-bottom: 17px;
 }
 .sidebar-note strong {
-  font-size: 11px;
+  font-size: 12px;
   display: block;
   color: #9fb5c0;
   font-weight: 500;
 }
 .sidebar-note p {
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.9;
   margin-top: 10px;
   color: #6e8a99;
 }
 .sidebar-note > span {
-  font: 6px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 1.1px;
   color: #52717d;
   display: block;
@@ -862,7 +862,7 @@ body:has(.dashboard) footer {
   height: 31px;
   display: grid;
   place-items: center;
-  font: 11px var(--mono);
+  font: 12px var(--mono);
   border-radius: 5px;
   border: 1px solid #34525d;
   background: #172d37;
@@ -884,13 +884,13 @@ body:has(.dashboard) footer {
 }
 .sidebar-bottom strong {
   display: block;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
   color: #b3c7d0;
 }
 .sidebar-bottom > div > span:not(.admin-avatar > span) {
   display: block;
-  font-size: 8px;
+  font-size: 12px;
   color: #617d8b;
   margin-top: 5px;
 }
@@ -909,7 +909,7 @@ body:has(.dashboard) footer {
   display: flex;
   align-items: center;
   gap: 11px;
-  font: 7px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 1.3px;
   color: #5d7886;
   margin-bottom: 34px;
@@ -925,7 +925,7 @@ body:has(.dashboard) footer {
   display: flex;
   align-items: center;
   gap: 7px;
-  font-size: 6px;
+  font-size: 12px;
   color: #6f8f9c;
 }
 .console-mode .tiny-square {
@@ -941,7 +941,7 @@ body:has(.dashboard) footer {
   scroll-margin-top: 30px;
 }
 .dashboard-head .eyebrow {
-  font-size: 7px;
+  font-size: 12px;
   letter-spacing: 1.5px;
   margin-bottom: 14px;
 }
@@ -953,7 +953,7 @@ body:has(.dashboard) footer {
   color: var(--cyan);
 }
 .dashboard-head p {
-  font-size: 11px;
+  font-size: 12px;
   margin-top: 11px;
   color: #819aa8;
 }
@@ -990,7 +990,7 @@ body:has(.dashboard) footer {
   align-items: center;
   gap: 8px;
   color: #8fa7b5;
-  font: 7px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 1.1px;
 }
 .stat-label > .icon {
@@ -1015,12 +1015,12 @@ body:has(.dashboard) footer {
   color: var(--amber);
 }
 .stat-code {
-  font: 6px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 0.7px;
   color: #5b7b89;
 }
 .stat-bottom {
-  font-size: 8px;
+  font-size: 12px;
   color: #7893a2;
   display: flex;
   align-items: center;
@@ -1056,7 +1056,7 @@ body:has(.dashboard) footer {
   display: flex;
   align-items: center;
   gap: 8px;
-  font: 6px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 1px;
   color: #5b7b89;
 }
@@ -1076,13 +1076,13 @@ body:has(.dashboard) footer {
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-  font: 7px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 1.1px;
   color: #9bb3bf;
   margin-bottom: 18px;
 }
 .field-heading > span:last-child:not(:first-child) {
-  font-size: 6px;
+  font-size: 12px;
   color: #668795;
   padding: 4px 6px;
   border: 1px solid #223a46;
@@ -1161,17 +1161,17 @@ body:has(.dashboard) footer {
 }
 .dropzone
   > span:not(.upload-symbol):not(.small-button):not(.dropzone-baseline) {
-  font-size: 10px;
+  font-size: 12px;
   color: #7896a7;
 }
 .dropzone .small-button {
-  font-size: 9px;
+  font-size: 12px;
   padding: 7px 10px;
   margin-top: 4px;
   gap: 17px;
 }
 .dropzone-baseline {
-  font: 5px var(--mono);
+  font: 12px var(--mono);
   color: #4e7282;
   letter-spacing: 1.4px;
   margin-top: 8px;
@@ -1190,7 +1190,7 @@ body:has(.dashboard) footer {
   justify-content: center;
   gap: 7px;
   color: #668695;
-  font-size: 8px;
+  font-size: 12px;
   margin-top: 13px;
 }
 .upload-settings {
@@ -1211,12 +1211,12 @@ body:has(.dashboard) footer {
 .protection-setting label {
   margin: 0;
   color: #b9ced7;
-  font-size: 11px;
+  font-size: 12px;
   cursor: pointer;
 }
 .protection-setting > div > span {
   display: block;
-  font-size: 8px;
+  font-size: 12px;
   color: #6f8c9d;
   margin-top: 6px;
 }
@@ -1268,7 +1268,7 @@ body:has(.dashboard) footer {
   color: #678795;
 }
 .upload-settings > .hint {
-  font-size: 8px;
+  font-size: 12px;
   margin-top: 9px;
   color: #6f8c9b;
 }
@@ -1283,7 +1283,7 @@ body:has(.dashboard) footer {
   color: var(--amber);
 }
 .link-warning p {
-  font-size: 10px;
+  font-size: 12px;
   color: #b9a682;
   line-height: 1.6;
 }
@@ -1293,14 +1293,14 @@ body:has(.dashboard) footer {
 }
 .transfer-submit > .button {
   min-height: 43px;
-  font-size: 11px;
+  font-size: 12px;
 }
 .transfer-submit > span {
   display: flex;
   gap: 5px;
   justify-content: center;
   align-items: center;
-  font-size: 7px;
+  font-size: 12px;
   color: #6c8b9a;
   margin-top: 11px;
 }
@@ -1329,7 +1329,7 @@ body:has(.dashboard) footer {
   min-width: 0;
 }
 .result-content label {
-  font: 7px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 1.3px;
   color: var(--lime);
   margin-bottom: 10px;
@@ -1339,7 +1339,7 @@ body:has(.dashboard) footer {
   gap: 9px;
 }
 .result-content input {
-  font: 10px var(--mono) !important;
+  font: 12px var(--mono) !important;
   height: 35px !important;
   background: #0d1b15 !important;
   border-color: #2f4a38 !important;
@@ -1368,7 +1368,7 @@ body:has(.dashboard) footer {
   gap: 11px;
 }
 .count {
-  font: 8px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 0;
   color: #95aebc;
   background: #182731;
@@ -1401,14 +1401,14 @@ body:has(.dashboard) footer {
   border-radius: 2px;
   padding: 7px 11px;
   color: #829daa;
-  font-size: 9px;
+  font-size: 12px;
 }
 .filter-tabs button.active {
   background: #1a303c;
   color: #c8edf1;
 }
 .filter-tabs button > span {
-  font: 7px var(--mono);
+  font: 12px var(--mono);
   color: #6f9fac;
 }
 .search-field {
@@ -1428,10 +1428,10 @@ body:has(.dashboard) footer {
   padding-left: 32px !important;
   border-color: #203540 !important;
   background: #0a141c !important;
-  font-size: 10px !important;
+  font-size: 12px !important;
 }
 .search-field input::placeholder {
-  font-size: 9px;
+  font-size: 12px;
 }
 .search-field button {
   position: absolute;
@@ -1448,7 +1448,7 @@ body:has(.dashboard) footer {
   padding: 12px 25px;
   background: #0a131bee;
   border-block: 1px solid var(--line);
-  font: 6px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 1.1px;
   color: #688795;
 }
@@ -1491,7 +1491,7 @@ body:has(.dashboard) footer {
   min-width: 0;
 }
 .share-details strong {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
   display: block;
   overflow: hidden;
@@ -1503,7 +1503,7 @@ body:has(.dashboard) footer {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 7px;
+  font-size: 12px;
   color: #6e8a9b;
   margin-top: 7px;
   white-space: nowrap;
@@ -1520,7 +1520,7 @@ body:has(.dashboard) footer {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 9px;
+  font-size: 12px;
   color: #91b1bf;
 }
 .share-access > .icon {
@@ -1536,7 +1536,7 @@ body:has(.dashboard) footer {
   display: inline-flex;
   gap: 5px;
   align-items: center;
-  font: 6px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 0.5px;
   color: #b9dc9c;
   background: #2437217a;
@@ -1559,7 +1559,7 @@ body:has(.dashboard) footer {
   background: #748895;
 }
 .share-expiry > span:last-child {
-  font: 7px var(--mono);
+  font: 12px var(--mono);
   color: #7794a4;
   letter-spacing: -0.2px;
 }
@@ -1570,7 +1570,7 @@ body:has(.dashboard) footer {
   gap: 8px;
 }
 .share-actions > .small-button {
-  font-size: 8px;
+  font-size: 12px;
   gap: 6px;
   padding: 7px 8px;
 }
@@ -1592,7 +1592,7 @@ body:has(.dashboard) footer {
   justify-content: flex-end;
 }
 .delete-confirm > span {
-  font-size: 7px;
+  font-size: 12px;
   flex-basis: 100%;
   text-align: right;
   color: #a7b9c2;
@@ -1602,7 +1602,7 @@ body:has(.dashboard) footer {
   background: #301c25;
   border-radius: 3px;
   padding: 5px 7px;
-  font-size: 8px;
+  font-size: 12px;
 }
 .delete-confirm > .icon-button {
   width: 22px;
@@ -1613,7 +1613,7 @@ body:has(.dashboard) footer {
   border-top: 1px solid var(--line);
   display: flex;
   justify-content: space-between;
-  font: 6px var(--mono);
+  font: 12px var(--mono);
   color: #5f7c8c;
   letter-spacing: 0.4px;
 }
@@ -1655,13 +1655,13 @@ body:has(.dashboard) footer {
   color: #a8c0cd;
 }
 .empty p {
-  font-size: 10px;
+  font-size: 12px;
   color: #728f9e;
   margin-top: 9px;
 }
 .empty > .text-button {
   margin-top: 14px;
-  font-size: 9px;
+  font-size: 12px;
 }
 .loading-ring {
   display: block;
@@ -1677,7 +1677,7 @@ body:has(.dashboard) footer {
   display: flex;
   justify-content: space-between;
   gap: 15px;
-  font: 5px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 1.2px;
   color: #4f6b7b;
   padding: 22px 0 5px;
@@ -1690,7 +1690,7 @@ body:has(.dashboard) footer {
 }
 .receive-page > .eyebrow {
   justify-content: center;
-  font-size: 7px;
+  font-size: 12px;
   margin-bottom: 20px;
 }
 .receive-page > h1 {
@@ -1739,7 +1739,7 @@ body:has(.dashboard) footer {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 28px;
-  font: 6px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 1.2px;
   color: #6c90a0;
 }
@@ -1784,7 +1784,7 @@ body:has(.dashboard) footer {
 }
 .receive-meta {
   text-align: center;
-  font-size: 9px;
+  font-size: 12px;
   margin-top: 12px;
   color: #7796a6;
 }
@@ -1793,7 +1793,7 @@ body:has(.dashboard) footer {
   gap: 12px;
   align-items: center;
   margin: 26px 0 22px;
-  font: 6px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 1.4px;
   color: #678a9b;
 }
@@ -1816,7 +1816,7 @@ body:has(.dashboard) footer {
   justify-content: center;
   gap: 7px;
   margin-top: 20px;
-  font-size: 8px;
+  font-size: 12px;
   color: #7394a5;
 }
 .receive-card .banner {
@@ -1824,7 +1824,7 @@ body:has(.dashboard) footer {
   margin-bottom: 0;
 }
 .receive-footnote {
-  font: 7px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 0.6px;
   color: #658493;
   margin-top: 22px;
@@ -1840,7 +1840,7 @@ body:has(.dashboard) footer {
   border-radius: 3px;
   background: #15261d;
   color: #bedfa5;
-  font-size: 10px;
+  font-size: 12px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1854,7 +1854,7 @@ body:has(.dashboard) footer {
 .center-page .eyebrow {
   justify-content: center;
   margin-bottom: 21px;
-  font-size: 8px;
+  font-size: 12px;
 }
 .center-page h1 {
   font-size: 35px;
@@ -1867,7 +1867,7 @@ body:has(.dashboard) footer {
 .center-page .button {
   width: max-content;
   margin: 29px auto 0;
-  font-size: 11px;
+  font-size: 12px;
 }
 .state-visual {
   width: 145px;
@@ -1898,7 +1898,7 @@ body:has(.dashboard) footer {
 }
 .state-reference {
   display: block;
-  font: 7px var(--mono);
+  font: 12px var(--mono);
   letter-spacing: 2px;
   color: #4c7182;
   margin-top: 36px;
@@ -1959,7 +1959,7 @@ body:has(.dashboard) footer {
     padding-inline: 24px;
   }
   .side-nav {
-    font-size: 10px;
+    font-size: 12px;
     gap: 8px;
     padding-inline: 9px;
   }
@@ -1970,7 +1970,7 @@ body:has(.dashboard) footer {
     padding: 17px 15px 13px;
   }
   .stat-code {
-    font-size: 5px;
+    font-size: 12px;
   }
   .upload-file-area,
   .upload-settings {
@@ -1987,17 +1987,17 @@ body:has(.dashboard) footer {
     padding-inline: 21px;
   }
   .share-details > span {
-    font-size: 6px;
+    font-size: 12px;
     gap: 4px;
   }
   .share-access {
-    font-size: 8px;
+    font-size: 12px;
   }
   .share-actions {
     gap: 5px;
   }
   .share-actions > .small-button {
-    font-size: 7px;
+    font-size: 12px;
     padding: 7px 6px;
   }
   .share-actions .icon-button {
@@ -2017,7 +2017,7 @@ body:has(.dashboard) footer {
     min-height: 595px;
   }
   .hero h1 {
-    font-size: 64px;
+    font-size: 40px;
   }
   .hero-visual {
     margin-left: -48px;
@@ -2034,7 +2034,7 @@ body:has(.dashboard) footer {
     padding: 15px 13px;
   }
   .hero-instruction > div > span {
-    font-size: 9px;
+    font-size: 12px;
   }
   .principles article {
     padding: 25px;
@@ -2043,7 +2043,7 @@ body:has(.dashboard) footer {
     font-size: 15px;
   }
   .principles p {
-    font-size: 10px;
+    font-size: 12px;
   }
 }
 @media (max-width: 1000px) {
@@ -2060,7 +2060,7 @@ body:has(.dashboard) footer {
     margin-bottom: 22px;
   }
   .sidebar-title > span {
-    font-size: 8px;
+    font-size: 12px;
   }
   .console-sidebar nav {
     width: 100%;
@@ -2105,16 +2105,16 @@ body:has(.dashboard) footer {
     display: none;
   }
   .hero h1 {
-    font-size: 54px;
+    font-size: 40px;
   }
   .hero-instruction {
     max-width: 330px;
   }
   .hero-instruction strong {
-    font-size: 10px;
+    font-size: 12px;
   }
   .hero-instruction > div > span {
-    font-size: 8px;
+    font-size: 12px;
     line-height: 1.6;
   }
   .hero-instruction > .icon {
@@ -2125,11 +2125,11 @@ body:has(.dashboard) footer {
     margin-right: -40px;
   }
   .hero .eyebrow {
-    font-size: 6px;
+    font-size: 12px;
     letter-spacing: 1.5px;
   }
   .hero-meta {
-    font-size: 6px;
+    font-size: 12px;
     gap: 8px;
     letter-spacing: 0.6px;
   }
@@ -2137,16 +2137,16 @@ body:has(.dashboard) footer {
     width: 16px;
   }
   .graphic-coordinate {
-    font-size: 6px;
+    font-size: 12px;
   }
   .visual-tag {
-    font-size: 5px;
+    font-size: 12px;
   }
   .login-story h1 {
     font-size: 32px;
   }
   .login-story > p {
-    font-size: 10px;
+    font-size: 12px;
   }
   .login-panel h2 {
     font-size: 25px;
@@ -2162,18 +2162,18 @@ body:has(.dashboard) footer {
     margin: 0 -21px;
   }
   .login-story .coordinate-bottom {
-    font-size: 5px;
+    font-size: 12px;
   }
   .login-story .coordinate-top {
-    font-size: 5px;
+    font-size: 12px;
   }
   .login-story-bottom {
     left: 22px;
     right: 22px;
-    font-size: 5px;
+    font-size: 12px;
   }
   .login-panel-bottom {
-    font-size: 5px;
+    font-size: 12px;
     letter-spacing: 0.6px;
   }
   .login-panel {
@@ -2183,7 +2183,7 @@ body:has(.dashboard) footer {
     padding-inline: 28px;
   }
   .login-panel > .section-number {
-    font-size: 6px;
+    font-size: 12px;
   }
 }
 @media (max-width: 760px) {
@@ -2204,7 +2204,7 @@ body:has(.dashboard) footer {
     margin-left: 0;
   }
   .top-label {
-    font-size: 6px;
+    font-size: 12px;
     letter-spacing: 1px;
     gap: 7px;
   }
@@ -2217,11 +2217,11 @@ body:has(.dashboard) footer {
     min-height: 0;
   }
   .hero h1 {
-    font-size: 62px;
+    font-size: 40px;
     letter-spacing: -3px;
   }
   .hero .eyebrow {
-    font-size: 7px;
+    font-size: 12px;
     letter-spacing: 1.7px;
     margin-bottom: 24px;
   }
@@ -2235,17 +2235,17 @@ body:has(.dashboard) footer {
     padding: 16px;
   }
   .hero-instruction strong {
-    font-size: 11px;
+    font-size: 12px;
   }
   .hero-instruction > div > span {
-    font-size: 10px;
+    font-size: 12px;
   }
   .hero-instruction > .icon {
     display: block;
   }
   .hero-meta {
     margin-top: 23px;
-    font-size: 6px;
+    font-size: 12px;
     gap: 11px;
   }
   .hero-visual {
@@ -2256,13 +2256,13 @@ body:has(.dashboard) footer {
     margin: auto;
   }
   .graphic-coordinate {
-    font-size: 7px;
+    font-size: 12px;
   }
   .coordinate-bottom {
-    font-size: 6px;
+    font-size: 12px;
   }
   .visual-tag {
-    font-size: 6px;
+    font-size: 12px;
     margin-top: -10px;
   }
   .landing {
@@ -2293,15 +2293,15 @@ body:has(.dashboard) footer {
   .principles p {
     max-width: none;
     margin-top: 8px;
-    font-size: 11px;
+    font-size: 12px;
   }
   .principle-index {
     top: 27px;
     right: 22px;
-    font-size: 7px;
+    font-size: 12px;
   }
   .landing-baseline {
-    font-size: 5px;
+    font-size: 12px;
     line-height: 1.8;
     letter-spacing: 1px;
     gap: 15px;
@@ -2314,20 +2314,20 @@ body:has(.dashboard) footer {
     margin: 0 24px;
     padding: 23px 0;
     flex-wrap: wrap;
-    font-size: 9px;
+    font-size: 12px;
     gap: 18px;
   }
   footer > span:nth-child(2) {
     order: 3;
     width: 100%;
-    font-size: 9px;
+    font-size: 12px;
     margin-top: -4px;
   }
   .footer-lock {
-    font-size: 6px;
+    font-size: 12px;
   }
   .footer-brand {
-    font-size: 8px;
+    font-size: 12px;
   }
   .login-page {
     display: flex;
@@ -2341,7 +2341,7 @@ body:has(.dashboard) footer {
     border-bottom: 1px solid var(--line);
   }
   .login-story .eyebrow {
-    font-size: 6px;
+    font-size: 12px;
     letter-spacing: 1.1px;
     margin-bottom: 19px;
   }
@@ -2350,7 +2350,7 @@ body:has(.dashboard) footer {
     letter-spacing: -1.3px;
   }
   .login-story > p {
-    font-size: 10px;
+    font-size: 12px;
     margin-top: 14px;
   }
   .login-story .transfer-graphic {
@@ -2378,7 +2378,7 @@ body:has(.dashboard) footer {
     font-size: 26px;
   }
   .login-panel > p {
-    font-size: 11px;
+    font-size: 12px;
   }
   .login-card {
     margin-top: 26px;
@@ -2387,7 +2387,7 @@ body:has(.dashboard) footer {
     margin-top: 28px;
     padding-top: 0;
     justify-content: center;
-    font-size: 5px;
+    font-size: 12px;
   }
   .login-info {
     padding-top: 20px;
@@ -2421,12 +2421,12 @@ body:has(.dashboard) footer {
     padding: 22px 20px 15px;
   }
   .console-breadcrumb {
-    font-size: 6px;
+    font-size: 12px;
     margin-bottom: 27px;
     gap: 8px;
   }
   .console-mode {
-    font-size: 5px;
+    font-size: 12px;
     letter-spacing: 0.7px;
   }
   .dashboard-head {
@@ -2439,12 +2439,12 @@ body:has(.dashboard) footer {
     letter-spacing: -1.4px;
   }
   .dashboard-head .eyebrow {
-    font-size: 5px;
+    font-size: 12px;
     letter-spacing: 1.2px;
     margin-bottom: 12px;
   }
   .dashboard-head p {
-    font-size: 9px;
+    font-size: 12px;
     max-width: 220px;
     line-height: 1.8;
     margin-top: 12px;
@@ -2471,7 +2471,7 @@ body:has(.dashboard) footer {
     border-radius: 4px;
   }
   .stat-label {
-    font-size: 5px;
+    font-size: 12px;
     gap: 5px;
     letter-spacing: 0.5px;
   }
@@ -2489,12 +2489,12 @@ body:has(.dashboard) footer {
   }
   .stat-code {
     display: block;
-    font-size: 4px;
+    font-size: 12px;
     letter-spacing: 0.4px;
     margin-top: 6px;
   }
   .stat-bottom {
-    font-size: 6px;
+    font-size: 12px;
     line-height: 1.5;
     gap: 4px;
     margin-top: 11px;
@@ -2512,7 +2512,7 @@ body:has(.dashboard) footer {
     padding: 21px 20px;
   }
   .section-number {
-    font-size: 6px;
+    font-size: 12px;
     letter-spacing: 1px;
     gap: 7px;
   }
@@ -2529,7 +2529,7 @@ body:has(.dashboard) footer {
     border-bottom: 1px solid var(--line);
   }
   .field-heading {
-    font-size: 6px;
+    font-size: 12px;
     margin-bottom: 17px;
   }
   .dropzone {
@@ -2541,7 +2541,7 @@ body:has(.dashboard) footer {
   }
   .dropzone
     > span:not(.upload-symbol):not(.small-button):not(.dropzone-baseline) {
-    font-size: 9px;
+    font-size: 12px;
   }
   .upload-settings {
     padding: 22px 20px 20px;
@@ -2556,10 +2556,10 @@ body:has(.dashboard) footer {
     font-size: 12px;
   }
   .protection-setting > div > span {
-    font-size: 9px;
+    font-size: 12px;
   }
   .upload-settings > .hint {
-    font-size: 9px;
+    font-size: 12px;
     line-height: 1.8;
     margin-top: 10px;
   }
@@ -2569,7 +2569,7 @@ body:has(.dashboard) footer {
     height: 45px;
   }
   input::placeholder {
-    font-size: 11px;
+    font-size: 12px;
   }
   .transfer-submit {
     padding-top: 23px;
@@ -2579,7 +2579,7 @@ body:has(.dashboard) footer {
     font-size: 12px;
   }
   .transfer-submit > span {
-    font-size: 8px;
+    font-size: 12px;
     margin-top: 12px;
   }
   .link-result {
@@ -2600,14 +2600,14 @@ body:has(.dashboard) footer {
   }
   .result-content input {
     flex-basis: 100%;
-    font-size: 9px !important;
+    font-size: 12px !important;
   }
   .result-content .small-button {
     margin-left: auto;
-    font-size: 9px;
+    font-size: 12px;
   }
   .result-content label {
-    font-size: 6px;
+    font-size: 12px;
     line-height: 1.5;
   }
   .shares-panel {
@@ -2621,7 +2621,7 @@ body:has(.dashboard) footer {
     gap: 9px;
   }
   .list-heading .section-number {
-    font-size: 5px;
+    font-size: 12px;
     letter-spacing: 0.85px;
   }
   .list-heading .icon-button {
@@ -2642,7 +2642,7 @@ body:has(.dashboard) footer {
   .filter-tabs button {
     flex: 1;
     justify-content: center;
-    font-size: 10px;
+    font-size: 12px;
     padding: 8px;
   }
   .search-field {
@@ -2654,7 +2654,7 @@ body:has(.dashboard) footer {
     font-size: 14px !important;
   }
   .search-field input::placeholder {
-    font-size: 10px;
+    font-size: 12px;
   }
   .table-heading {
     display: none;
@@ -2680,7 +2680,7 @@ body:has(.dashboard) footer {
     max-width: 100%;
   }
   .share-details > span {
-    font-size: 8px;
+    font-size: 12px;
     margin-top: 8px;
     gap: 6px;
     white-space: normal;
@@ -2688,7 +2688,7 @@ body:has(.dashboard) footer {
   .share-access {
     grid-column: 1;
     grid-row: 3;
-    font-size: 9px;
+    font-size: 12px;
     gap: 7px;
   }
   .share-expiry {
@@ -2699,10 +2699,10 @@ body:has(.dashboard) footer {
     gap: 9px;
   }
   .share-expiry > span:last-child {
-    font-size: 8px;
+    font-size: 12px;
   }
   .status {
-    font-size: 6px;
+    font-size: 12px;
     padding: 4px 6px;
   }
   .share-actions {
@@ -2712,7 +2712,7 @@ body:has(.dashboard) footer {
     align-self: center;
   }
   .share-actions > .small-button {
-    font-size: 8px;
+    font-size: 12px;
     padding: 8px;
   }
   .share-actions .icon-button {
@@ -2720,10 +2720,10 @@ body:has(.dashboard) footer {
     height: 30px;
   }
   .delete-confirm > span {
-    font-size: 8px;
+    font-size: 12px;
   }
   .delete-confirm > .danger {
-    font-size: 9px;
+    font-size: 12px;
     padding: 6px 7px;
   }
   .delete-confirm > .icon-button {
@@ -2732,7 +2732,7 @@ body:has(.dashboard) footer {
   }
   .list-footer {
     padding: 13px 20px;
-    font-size: 5px;
+    font-size: 12px;
     letter-spacing: 0.3px;
   }
   .list-footer > .icon {
@@ -2745,13 +2745,13 @@ body:has(.dashboard) footer {
     font-size: 13px;
   }
   .empty p {
-    font-size: 10px;
+    font-size: 12px;
     max-width: 240px;
     margin-inline: auto;
     line-height: 1.8;
   }
   .console-footer {
-    font-size: 4px;
+    font-size: 12px;
     letter-spacing: 0.8px;
     line-height: 1.7;
     padding-top: 22px;
@@ -2766,7 +2766,7 @@ body:has(.dashboard) footer {
     max-width: none;
   }
   .receive-page > .eyebrow {
-    font-size: 6px;
+    font-size: 12px;
     letter-spacing: 1.5px;
     margin-bottom: 17px;
   }
@@ -2775,7 +2775,7 @@ body:has(.dashboard) footer {
     letter-spacing: -1.3px;
   }
   .receive-page > p {
-    font-size: 11px;
+    font-size: 12px;
     margin-top: 14px;
     line-height: 1.8;
     padding-inline: 10px;
@@ -2785,7 +2785,7 @@ body:has(.dashboard) footer {
     margin-top: 26px;
   }
   .receive-card-top {
-    font-size: 5px;
+    font-size: 12px;
     letter-spacing: 0.8px;
     margin-bottom: 25px;
   }
@@ -2793,23 +2793,23 @@ body:has(.dashboard) footer {
     font-size: 20px;
   }
   .receive-meta {
-    font-size: 8px;
+    font-size: 12px;
     line-height: 1.9;
   }
   .receive-divider {
     margin-top: 24px;
-    font-size: 5px;
+    font-size: 12px;
     letter-spacing: 1px;
   }
   .receive-card label {
-    font-size: 11px;
+    font-size: 12px;
   }
   .receive-card > .hint {
-    font-size: 8px;
+    font-size: 12px;
     margin-top: 18px;
   }
   .receive-footnote {
-    font-size: 5px;
+    font-size: 12px;
     letter-spacing: 0.3px;
     line-height: 1.7;
   }
@@ -2818,7 +2818,7 @@ body:has(.dashboard) footer {
     padding: 0 25px;
   }
   .center-page .eyebrow {
-    font-size: 6px;
+    font-size: 12px;
     letter-spacing: 1px;
   }
   .center-page h1 {
@@ -2827,7 +2827,7 @@ body:has(.dashboard) footer {
     letter-spacing: -1px;
   }
   .center-page p {
-    font-size: 11px;
+    font-size: 12px;
   }
   .state-visual {
     width: 125px;
@@ -2838,33 +2838,33 @@ body:has(.dashboard) footer {
     height: 36px;
   }
   .state-reference {
-    font-size: 6px;
+    font-size: 12px;
     letter-spacing: 1.2px;
   }
   .download-complete {
-    font-size: 9px;
+    font-size: 12px;
   }
 }
 @media (max-width: 370px) {
   .top-label {
-    font-size: 5px;
+    font-size: 12px;
     letter-spacing: 0.6px;
   }
   .topbar {
     padding-inline: 18px;
   }
   .hero h1 {
-    font-size: 53px;
+    font-size: 40px;
   }
   .hero .eyebrow {
-    font-size: 6px;
+    font-size: 12px;
     letter-spacing: 1.2px;
   }
   .hero-instruction strong {
-    font-size: 10px;
+    font-size: 12px;
   }
   .hero-instruction > div > span {
-    font-size: 8px;
+    font-size: 12px;
   }
   .hero-instruction {
     gap: 10px;
@@ -2886,14 +2886,14 @@ body:has(.dashboard) footer {
     padding-inline: 8px;
   }
   .stat-label {
-    font-size: 4px;
+    font-size: 12px;
     gap: 4px;
   }
   .share-row {
     padding-inline: 16px;
   }
   .share-actions > .small-button {
-    font-size: 7px;
+    font-size: 12px;
     gap: 5px;
     padding: 7px 6px;
   }
@@ -2904,7 +2904,7 @@ body:has(.dashboard) footer {
     gap: 6px;
   }
   .share-expiry > span:last-child {
-    font-size: 7px;
+    font-size: 12px;
   }
   .login-panel,
   .login-story {
@@ -2926,5 +2926,923 @@ body:has(.dashboard) footer {
   *:after {
     animation: none !important;
     transition: none !important;
+  }
+}
+
+/* A balanced, readable type scale across the interface. */
+:root {
+  font-size: 15px;
+}
+h1 {
+  font-size: 36px;
+  letter-spacing: -1.3px;
+}
+h2 {
+  font-size: 25px;
+}
+p {
+  font-size: 14px;
+}
+label,
+.button,
+.outline-button,
+.small-button,
+.text-button {
+  font-size: 14px;
+  line-height: 1.5;
+}
+input:not([type="file"]):not([type="checkbox"]),
+select {
+  font-size: 14px;
+  min-height: 44px;
+}
+input::placeholder {
+  font-size: 14px;
+}
+.hero h1 {
+  font-size: 40px;
+  line-height: 1.16;
+  letter-spacing: -1.8px;
+}
+.hero-copy > p,
+.hero-instruction strong,
+.hero-instruction > div > span,
+.principles p,
+.login-story > p,
+.login-panel > p,
+.login-info p,
+.dashboard-head p,
+.hint,
+.upload-settings > .hint,
+.file-area-note,
+.protection-setting > div > span,
+.link-warning p,
+.empty p,
+.receive-page > p,
+.center-page p {
+  font-size: 14px;
+  line-height: 1.75;
+}
+.eyebrow,
+.section-number,
+.top-label,
+.field-heading,
+.stat-label,
+.console-breadcrumb,
+.hero-meta,
+.graphic-coordinate,
+.visual-tag,
+.landing-baseline,
+.login-story-bottom,
+.login-panel-bottom,
+.sidebar-title,
+.sidebar-note > span,
+.panel-corner,
+.dropzone-baseline,
+.result-content label,
+.receive-card-top,
+.receive-divider,
+.receive-footnote,
+.state-reference,
+.console-footer {
+  font-size: 12px;
+  line-height: 1.65;
+  letter-spacing: 0.65px;
+  overflow-wrap: anywhere;
+}
+.topbar {
+  height: auto;
+  min-height: 88px;
+  padding-block: 18px;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.top-label {
+  gap: 9px;
+}
+.topbar-rule {
+  min-width: 20px;
+}
+.language-switch {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.language-switch select,
+select.language-switch {
+  width: auto;
+  min-width: 112px;
+  min-height: 42px;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 8px 12px;
+  border: 1px solid #36515e;
+  border-radius: 4px;
+  background-color: #10212a;
+  color: var(--ink);
+  cursor: pointer;
+}
+.language-switch select:focus-visible,
+select.language-switch:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+}
+.hero {
+  min-height: 590px;
+}
+.hero .eyebrow {
+  font-size: 12px;
+}
+.hero-instruction {
+  max-width: 440px;
+  align-items: flex-start;
+}
+.hero-instruction > div {
+  min-width: 0;
+}
+.hero-meta {
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.principles article {
+  padding: 30px;
+}
+.principles h2 {
+  font-size: 20px;
+}
+.principle-index {
+  top: 22px;
+  right: 18px;
+}
+.landing-baseline {
+  gap: 24px;
+}
+.login-page {
+  min-height: 700px;
+}
+.login-story h1 {
+  font-size: 36px;
+  letter-spacing: -1.3px;
+}
+.login-story-bottom {
+  position: static;
+  margin-top: 10px;
+  padding-bottom: 24px;
+  gap: 20px;
+}
+.login-panel-bottom {
+  margin-top: 35px;
+}
+.login-panel > .section-number {
+  margin-bottom: 38px;
+}
+.dashboard {
+  grid-template-columns: 246px minmax(0, 1fr);
+}
+.console-content {
+  padding-inline: 30px;
+}
+.side-nav {
+  font-size: 14px;
+  gap: 10px;
+  padding: 12px 10px;
+}
+.sidebar-note {
+  margin-top: 60px;
+}
+.sidebar-note strong,
+.sidebar-note p {
+  font-size: 14px;
+  line-height: 1.7;
+}
+.sidebar-note > span {
+  font-size: 12px;
+}
+.sidebar-bottom strong {
+  font-size: 12px;
+}
+.sidebar-bottom > div > span:not(.admin-avatar > span) {
+  font-size: 12px;
+  line-height: 1.5;
+}
+.sidebar-bottom {
+  align-items: flex-start;
+}
+.console-breadcrumb {
+  flex-wrap: wrap;
+  row-gap: 8px;
+}
+.console-mode {
+  font-size: 12px;
+}
+.dashboard-head h1 {
+  font-size: 34px;
+}
+.dashboard-head .eyebrow {
+  font-size: 12px;
+}
+.stats-grid article {
+  padding: 21px 18px 17px;
+}
+.stat-label {
+  align-items: flex-start;
+}
+.stat-label > .icon {
+  margin-top: 2px;
+}
+.stats-grid article > div:nth-child(2) {
+  flex-wrap: wrap;
+  gap: 7px 12px;
+}
+.stat-code {
+  font-size: 12px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+  letter-spacing: 0;
+}
+.stat-bottom {
+  font-size: 12px;
+  line-height: 1.6;
+  max-width: none;
+}
+.panel-heading h2,
+.list-heading h2 {
+  font-size: 25px;
+}
+.panel-corner {
+  max-width: 120px;
+}
+.dropzone {
+  min-height: 290px;
+}
+.dropzone strong {
+  font-size: 16px;
+  line-height: 1.55;
+}
+.dropzone
+  > span:not(.upload-symbol):not(.small-button):not(.dropzone-baseline) {
+  font-size: 14px;
+  line-height: 1.6;
+}
+.dropzone .small-button {
+  font-size: 14px;
+  padding: 9px 12px;
+}
+.file-area-note {
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.file-area-note > .icon {
+  margin-top: 5px;
+}
+.upload-settings {
+  min-width: 0;
+}
+.protection-setting label {
+  font-size: 14px;
+}
+.upload-settings > .field-heading {
+  margin-bottom: 22px;
+}
+.transfer-submit > .button {
+  min-height: 46px;
+  font-size: 14px;
+}
+.transfer-submit > span {
+  font-size: 12px;
+  text-align: center;
+  line-height: 1.7;
+}
+.result-content input {
+  font-size: 12px !important;
+}
+.result-content > div {
+  flex-wrap: wrap;
+}
+.result-content input {
+  flex: 1 1 250px;
+}
+.result-content .small-button {
+  font-size: 14px;
+}
+.filter-tabs button {
+  min-height: 36px;
+  font-size: 14px;
+}
+.filter-tabs button > span {
+  font-size: 12px;
+}
+.search-field {
+  width: 240px;
+}
+.search-field input {
+  min-height: 40px;
+  font-size: 14px !important;
+}
+.search-field input::placeholder {
+  font-size: 14px;
+}
+.table-heading,
+.share-row {
+  grid-template-columns: minmax(150px, 1fr) 105px 140px 156px;
+  gap: 14px;
+}
+.table-heading {
+  font-size: 12px;
+  line-height: 1.6;
+  letter-spacing: 0.2px;
+}
+.share-details strong {
+  font-size: 14px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+.share-details > span {
+  font-size: 12px;
+  line-height: 1.7;
+  white-space: normal;
+  flex-wrap: wrap;
+}
+.share-access {
+  font-size: 12px;
+  line-height: 1.6;
+}
+.status {
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+.share-expiry > span:last-child {
+  font-size: 12px;
+  line-height: 1.6;
+}
+.share-actions > .small-button {
+  font-size: 12px;
+  padding: 9px;
+}
+.share-actions .icon-button {
+  width: 36px;
+  height: 36px;
+}
+.delete-confirm > span,
+.delete-confirm > .danger {
+  font-size: 12px;
+  line-height: 1.6;
+}
+.delete-confirm > .danger {
+  padding: 7px;
+}
+.list-footer {
+  font-size: 12px;
+  line-height: 1.6;
+  gap: 15px;
+}
+.empty h3 {
+  font-size: 16px;
+}
+.empty > .text-button {
+  font-size: 14px;
+}
+.console-footer {
+  font-size: 12px;
+  gap: 25px;
+}
+.console-footer > span {
+  max-width: 50%;
+}
+.receive-page {
+  max-width: 570px;
+}
+.receive-page > .eyebrow {
+  font-size: 12px;
+}
+.receive-card-top {
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.receive-card h2 {
+  font-size: 25px;
+}
+.receive-meta {
+  font-size: 14px;
+  line-height: 1.75;
+}
+.receive-card > .hint,
+.receive-footnote {
+  font-size: 12px;
+  line-height: 1.8;
+}
+.download-complete {
+  font-size: 14px;
+  line-height: 1.7;
+}
+.center-page .eyebrow {
+  font-size: 12px;
+}
+.center-page h1 {
+  font-size: 34px;
+}
+footer,
+.footer-lock,
+.footer-brand {
+  font-size: 12px;
+  line-height: 1.7;
+}
+footer > span:nth-child(2) {
+  font-size: 12px;
+}
+@media (max-width: 1250px) {
+  .dashboard {
+    grid-template-columns: 220px minmax(0, 1fr);
+  }
+  .console-content {
+    padding-inline: 24px;
+  }
+  .transfer-form {
+    grid-template-columns: 1fr;
+  }
+  .upload-file-area {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .dropzone {
+    min-height: 240px;
+  }
+  .upload-settings {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .table-heading {
+    display: none;
+  }
+  .share-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding-block: 22px;
+  }
+  .file-cell {
+    grid-column: 1/-1;
+  }
+  .share-access {
+    grid-row: 3;
+    grid-column: 1;
+  }
+  .share-expiry {
+    grid-row: 2;
+    grid-column: 1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .share-actions {
+    grid-row: 2/4;
+    grid-column: 2;
+  }
+  .stats-grid article > div:nth-child(2) {
+    display: block;
+  }
+  .stat-code {
+    display: block;
+    margin-top: 5px;
+  }
+  .panel-corner {
+    max-width: none;
+  }
+  .login-page {
+    margin-inline: 30px;
+  }
+}
+@media (max-width: 1000px) {
+  .console-sidebar {
+    display: none;
+  }
+  .dashboard {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .hero {
+    gap: 20px;
+  }
+  .hero h1 {
+    font-size: 36px;
+  }
+  .hero-instruction {
+    padding: 15px;
+  }
+  .hero-instruction > .icon {
+    display: none;
+  }
+  .hero-instruction strong,
+  .hero-instruction > div > span {
+    font-size: 14px;
+  }
+  .hero-meta {
+    font-size: 12px;
+  }
+  .hero .eyebrow {
+    font-size: 12px;
+  }
+  .login-story h1 {
+    font-size: 32px;
+  }
+  .login-story .eyebrow,
+  .login-panel > .section-number {
+    font-size: 12px;
+  }
+  .login-story .transfer-graphic {
+    margin-top: 15px;
+  }
+  .login-story .graphic-coordinate {
+    font-size: 12px;
+  }
+  .login-story-bottom {
+    font-size: 12px;
+  }
+  .login-panel-bottom {
+    font-size: 12px;
+  }
+  .topbar-rule {
+    display: none;
+  }
+  .top-label {
+    margin-left: auto;
+  }
+}
+@media (max-width: 760px) {
+  .topbar,
+  body:has(.dashboard) .topbar {
+    height: auto;
+    min-height: 80px;
+    padding: 18px 20px;
+    gap: 16px;
+  }
+  .top-label {
+    display: none;
+  }
+  .language-switch {
+    margin-left: auto;
+  }
+  .language-switch select,
+  select.language-switch {
+    min-width: 105px;
+    font-size: 14px;
+    min-height: 42px;
+  }
+  .hero {
+    padding-top: 38px;
+  }
+  .hero h1 {
+    font-size: 36px;
+    letter-spacing: -1.4px;
+  }
+  .hero .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.6px;
+  }
+  .hero-instruction strong,
+  .hero-instruction > div > span {
+    font-size: 14px;
+  }
+  .hero-meta {
+    font-size: 12px;
+    gap: 8px;
+  }
+  .hero-meta i {
+    width: 12px;
+  }
+  .visual-tag {
+    padding: 0 20px;
+    text-align: center;
+  }
+  .principles article {
+    padding: 27px 23px;
+  }
+  .principles h2 {
+    font-size: 20px;
+  }
+  .principle-index {
+    position: static;
+    grid-column: 2;
+    margin-bottom: 12px;
+    font-size: 12px;
+  }
+  .principles article > .icon {
+    grid-row: 1/4;
+  }
+  .principles p {
+    font-size: 14px;
+  }
+  .landing-baseline {
+    font-size: 12px;
+  }
+  .landing-baseline > span:first-child {
+    max-width: none;
+  }
+  .login-page {
+    margin: 25px 20px 40px;
+    min-height: 0;
+  }
+  .login-story h1 {
+    font-size: 30px;
+  }
+  .login-story .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.6px;
+  }
+  .login-panel h2 {
+    font-size: 28px;
+  }
+  .login-panel > p {
+    font-size: 14px;
+  }
+  .login-panel > .section-number {
+    font-size: 12px;
+  }
+  .login-panel-bottom {
+    font-size: 12px;
+    line-height: 1.8;
+  }
+  .console-content {
+    padding: 24px 20px 18px;
+  }
+  .console-breadcrumb,
+  .console-mode {
+    font-size: 12px;
+    letter-spacing: 0.3px;
+  }
+  .console-mode {
+    display: none;
+  }
+  .dashboard-head {
+    align-items: center;
+  }
+  .dashboard-head h1 {
+    font-size: 30px;
+    line-height: 1.2;
+    letter-spacing: -1px;
+  }
+  .dashboard-head .eyebrow {
+    font-size: 12px;
+  }
+  .dashboard-head p {
+    font-size: 14px;
+    max-width: none;
+  }
+  .dashboard-head .outline-button {
+    font-size: 0;
+    flex-shrink: 0;
+    padding: 12px;
+  }
+  .panel-heading h2,
+  .list-heading h2 {
+    font-size: 24px;
+  }
+  .section-number,
+  .list-heading .section-number {
+    font-size: 12px;
+    line-height: 1.7;
+    letter-spacing: 0.3px;
+  }
+  .field-heading {
+    font-size: 12px;
+  }
+  .field-heading > span:last-child:not(:first-child) {
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .dropzone {
+    min-height: 260px;
+  }
+  .dropzone strong {
+    font-size: 16px;
+  }
+  .dropzone
+    > span:not(.upload-symbol):not(.small-button):not(.dropzone-baseline) {
+    font-size: 14px;
+  }
+  .dropzone-baseline {
+    font-size: 12px;
+  }
+  .file-area-note {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .upload-settings > .hint,
+  .protection-setting > div > span {
+    font-size: 14px;
+  }
+  .transfer-submit > .button {
+    font-size: 14px;
+  }
+  .transfer-submit > span {
+    font-size: 12px;
+  }
+  .result-content input {
+    font-size: 12px !important;
+  }
+  .result-content label {
+    font-size: 12px;
+  }
+  .result-content .small-button {
+    font-size: 14px;
+  }
+  .filter-tabs button {
+    font-size: 14px;
+  }
+  .search-field input {
+    font-size: 16px !important;
+  }
+  .search-field input::placeholder {
+    font-size: 14px;
+  }
+  .share-row {
+    gap: 15px;
+  }
+  .share-details strong {
+    font-size: 14px;
+  }
+  .share-details > span {
+    font-size: 12px;
+  }
+  .share-access {
+    font-size: 12px;
+  }
+  .share-expiry {
+    gap: 8px;
+  }
+  .share-expiry > span:last-child,
+  .status {
+    font-size: 12px;
+  }
+  .share-actions > .small-button {
+    font-size: 12px;
+    padding: 9px;
+  }
+  .delete-confirm > span,
+  .delete-confirm > .danger {
+    font-size: 12px;
+  }
+  .list-footer {
+    font-size: 12px;
+    flex-wrap: wrap;
+  }
+  .empty h3 {
+    font-size: 16px;
+  }
+  .empty p {
+    font-size: 14px;
+    max-width: none;
+  }
+  .console-footer {
+    font-size: 12px;
+    flex-wrap: wrap;
+  }
+  .console-footer > span,
+  .console-footer > span:last-child {
+    max-width: none;
+    text-align: left;
+  }
+  .receive-page {
+    max-width: none;
+  }
+  .receive-page > .eyebrow {
+    font-size: 12px;
+  }
+  .receive-page > h1 {
+    font-size: 30px;
+  }
+  .receive-page > p {
+    font-size: 14px;
+  }
+  .receive-card-top {
+    font-size: 12px;
+  }
+  .receive-card h2 {
+    font-size: 24px;
+  }
+  .receive-meta {
+    font-size: 14px;
+  }
+  .receive-divider {
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  .receive-card label {
+    font-size: 14px;
+  }
+  .receive-card > .hint,
+  .receive-footnote {
+    font-size: 12px;
+  }
+  .center-page .eyebrow {
+    font-size: 12px;
+  }
+  .center-page h1 {
+    font-size: 30px;
+  }
+  .center-page p,
+  .download-complete {
+    font-size: 14px;
+  }
+  .state-reference {
+    font-size: 12px;
+  }
+  footer,
+  footer > span:nth-child(2),
+  .footer-lock,
+  .footer-brand {
+    font-size: 12px;
+  }
+}
+@media (max-width: 560px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .stats-grid article {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px 20px;
+    padding: 17px 18px;
+  }
+  .stat-label {
+    grid-column: 1;
+    font-size: 12px;
+    align-self: end;
+  }
+  .stats-grid article > div:nth-child(2) {
+    grid-column: 2;
+    grid-row: 1/3;
+    margin: 0;
+    align-self: center;
+    text-align: right;
+    max-width: 145px;
+  }
+  .stats-grid strong {
+    font-size: 28px;
+  }
+  .stat-code {
+    font-size: 12px;
+  }
+  .stat-bottom {
+    grid-column: 1;
+    font-size: 12px;
+    margin: 0;
+  }
+  .share-actions {
+    grid-column: 1/-1;
+    grid-row: 4;
+    justify-content: flex-start;
+    padding-top: 4px;
+  }
+  .share-expiry {
+    grid-column: 1/-1;
+  }
+  .share-access {
+    grid-column: 1/-1;
+  }
+  .delete-confirm {
+    justify-content: flex-start;
+  }
+  .delete-confirm > span {
+    text-align: left;
+  }
+  .panel-corner {
+    display: none;
+  }
+  .console-breadcrumb {
+    font-size: 12px;
+  }
+}
+@media (max-width: 370px) {
+  .hero h1 {
+    font-size: 32px;
+  }
+  .hero-instruction strong,
+  .hero-instruction > div > span {
+    font-size: 14px;
+  }
+  .hero .eyebrow {
+    font-size: 12px;
+  }
+  .dashboard-head h1 {
+    font-size: 28px;
+  }
+  .dashboard-head .eyebrow {
+    font-size: 12px;
+  }
+  .login-story h1 {
+    font-size: 28px;
+  }
+  .login-panel h2 {
+    font-size: 26px;
+  }
+  .stat-label,
+  .stat-code,
+  .stat-bottom {
+    font-size: 12px;
+  }
+  .share-actions > .small-button,
+  .share-expiry > span:last-child {
+    font-size: 12px;
   }
 }

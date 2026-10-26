@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from "./LanguageProvider";
 import { FormEvent, useState } from "react";
 import { Icon } from "./Interface";
 export default function ReceiveFile({
@@ -14,6 +15,7 @@ export default function ReceiveFile({
   size: number | null;
   expiresAt: number;
 }) {
+  const { t, localeTag } = useTranslation();
   const [unlocked, setUnlocked] = useState(!locked),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false),
@@ -72,37 +74,44 @@ export default function ReceiveFile({
   return (
     <main id="main-content" className="receive-page">
       <div className="eyebrow">
-        <span className="tiny-square" /> DESTINAZIONE RAGGIUNTA
+        <span className="tiny-square" />
+        {t("DESTINAZIONE RAGGIUNTA")}
       </div>
-      <h1>{unlocked ? "Il tuo file è pronto." : "Una consegna riservata."}</h1>
+      <h1>
+        {unlocked ? t("Il tuo file è pronto.") : t("Una consegna riservata.")}
+      </h1>
       <p>
         {unlocked
-          ? "Un ultimo passaggio e il documento è sul tuo dispositivo."
-          : "Il mittente ha protetto questo file. Inserisci la password per accedere."}
+          ? t("Un ultimo passaggio e il documento è sul tuo dispositivo.")
+          : t(
+              "Il mittente ha protetto questo file. Inserisci la password per accedere.",
+            )}
       </p>
       <section className="receive-card">
         <div className="receive-card-top">
-          <span>DEEPDROP / FILE DELIVERY</span>
+          <span>{t("DEEPDROP / FILE DELIVERY")}</span>
           <span>
             <span className="tiny-square" />
-            {unlocked ? "PRONTO" : "ACCESSO RICHIESTO"}
+            {unlocked ? t("PRONTO") : t("ACCESSO RICHIESTO")}
           </span>
         </div>
         <div className="receive-file-icon">
           <Icon name={unlocked ? "file" : "lock"} size={29} />
         </div>
-        <h2>{filename || "Documento riservato"}</h2>
+        <h2>{filename || t("Documento riservato")}</h2>
         <p className="receive-meta">
-          {size !== null ? `${(size / 1024 / 1024).toFixed(2)} MB · ` : ""}
-          Disponibile fino al{" "}
-          {new Date(expiresAt).toLocaleDateString("it-IT", {
+          {size !== null
+            ? `${new Intl.NumberFormat(localeTag, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(size / 1024 / 1024)} MB · `
+            : ""}
+          {t("Disponibile fino al")}{" "}
+          {new Date(expiresAt).toLocaleDateString(localeTag, {
             day: "numeric",
             month: "long",
             year: "numeric",
           })}
         </p>
         <div className="receive-divider">
-          {unlocked ? "IL PROSSIMO PASSO È TUO" : "VERIFICA DI ACCESSO"}
+          {unlocked ? t("IL PROSSIMO PASSO È TUO") : t("VERIFICA DI ACCESSO")}
         </div>
         {unlocked ? (
           <button
@@ -111,15 +120,15 @@ export default function ReceiveFile({
             onClick={() => void download()}
           >
             {busy
-              ? "Preparazione del file…"
+              ? t("Preparazione del file…")
               : downloaded
-                ? "Scarica di nuovo"
-                : "Scarica il file"}
+                ? t("Scarica di nuovo")
+                : t("Scarica il file")}
             <Icon name="download" size={18} />
           </button>
         ) : (
           <form onSubmit={unlock}>
-            <label htmlFor="password">Password del file</label>
+            <label htmlFor="password">{t("Password del file")}</label>
             <div className="input-with-icon">
               <Icon name="lock" size={16} />
               <input
@@ -129,11 +138,11 @@ export default function ReceiveFile({
                 maxLength={256}
                 required
                 autoComplete="off"
-                placeholder="La password ricevuta dal mittente"
+                placeholder={t("La password ricevuta dal mittente")}
               />
             </div>
             <button className="button" disabled={busy}>
-              {busy ? "Verifica in corso…" : "Accedi al file"}
+              {busy ? t("Verifica in corso…") : t("Accedi al file")}
               <Icon name="arrow" size={18} />
             </button>
           </form>
@@ -141,25 +150,25 @@ export default function ReceiveFile({
         {downloaded && !error && (
           <div className="download-complete" role="status">
             <Icon name="check" size={15} />
-            Download avviato. Controlla i file del tuo dispositivo.
+            {t("Download avviato. Controlla i file del tuo dispositivo.")}
           </div>
         )}
         {error && (
           <p className="error banner" role="alert">
             <Icon name="shield" size={16} />
-            {error}
+            {t(error)}
           </p>
         )}
         <p className="hint">
           <Icon name={locked ? "lock" : "link"} size={12} />
           {locked
-            ? "Condivisione protetta da password"
-            : "Chi possiede il link può scaricare il file"}
+            ? t("Condivisione protetta da password")
+            : t("Chi possiede il link può scaricare il file")}
         </p>
       </section>
       <div className="receive-footnote">
         <Icon name="clock" size={12} />
-        IL LINK SCADE AUTOMATICAMENTE ALLA DATA INDICATA.
+        {t("IL LINK SCADE AUTOMATICAMENTE ALLA DATA INDICATA.")}
       </div>
     </main>
   );

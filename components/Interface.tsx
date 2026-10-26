@@ -1,3 +1,5 @@
+"use client";
+import { useTranslation } from "./LanguageProvider";
 export type IconName =
   | "arrow"
   | "upload"
@@ -155,6 +157,7 @@ export function Mark() {
   );
 }
 export function TransferGraphic({ compact = false }: { compact?: boolean }) {
+  const { t } = useTranslation();
   return (
     <div
       className={`transfer-graphic ${compact ? "compact" : ""}`}
@@ -246,7 +249,7 @@ export function TransferGraphic({ compact = false }: { compact?: boolean }) {
           fontSize="9"
           letterSpacing="2"
         >
-          SOURCE / FILE
+          {t("SOURCE / FILE")}
         </text>
         <text
           x="480"
@@ -256,7 +259,7 @@ export function TransferGraphic({ compact = false }: { compact?: boolean }) {
           fontSize="9"
           letterSpacing="2"
         >
-          TARGET / LINK
+          {t("TARGET / LINK")}
         </text>
         <text
           x="288"
@@ -270,10 +273,10 @@ export function TransferGraphic({ compact = false }: { compact?: boolean }) {
         </text>
       </svg>
       <div className="graphic-coordinate coordinate-top">
-        01 / TRANSFER LAYER
+        {t("01 / TRANSFER LAYER")}
       </div>
       <div className="graphic-coordinate coordinate-bottom">
-        FILE → LINK → DESTINATARIO
+        {t("FILE → LINK → DESTINATARIO")}
       </div>
     </div>
   );
