@@ -50,8 +50,9 @@ test("admin path change invalidates sessions and reserved paths are rejected", (
   const version = adminVersion();
   process.env.ADMIN_PATH = "/another-path";
   assert.notEqual(adminVersion(), version);
+  process.env.ADMIN_PATH = "/admin";
+  assert.equal(adminPath(), "/admin");
   for (const path of [
-    "/admin",
     "/api",
     "/s",
     "/_next",

@@ -28,7 +28,7 @@ export function adminPath() {
   const path = process.env.ADMIN_PATH || "/admin123";
   if (
     !/^\/[A-Za-z0-9_-]{1,64}$/.test(path) ||
-    ["s", "api", "_next", "favicon.ico", "admin"].includes(path.slice(1))
+    ["s", "api", "_next", "favicon.ico"].includes(path.slice(1))
   )
     throw new Error("ADMIN_PATH non valido");
   return path;
