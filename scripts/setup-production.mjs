@@ -33,8 +33,8 @@ function hiddenInput(prompt) {
   });
 }
 try {
-  const password = await hiddenInput('New administrator password (16–256 characters, hidden): ');
-  if (password.length < 16) throw new Error('Use at least 16 characters.');
+  const password = await hiddenInput('New administrator password (12–256 characters, hidden): ');
+  if (password.length < 12) throw new Error('Use at least 12 characters.');
   const confirmation = await hiddenInput('Repeat administrator password: ');
   if (password !== confirmation) throw new Error('Passwords do not match.');
   const salt = randomBytes(16).toString('hex');
