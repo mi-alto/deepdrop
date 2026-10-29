@@ -1289,6 +1289,19 @@ body:has(.dashboard) footer {
 }
 .upload-progress {
   width: 100%;
+  margin-top: 12px;
+  accent-color: var(--lime);
+}
+.upload-status {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid #48624b;
+  border-radius: 4px;
+  line-height: 1.6;
+  font-size: 13px;
+}
+.upload-status p {
+  margin: 6px 0 0;
 }
 .transfer-submit {
   margin-top: auto;

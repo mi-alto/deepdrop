@@ -140,7 +140,7 @@ export default function AdminPanel({
       setShowPassword(false);
       setHours("168");
       await refresh();
-      setNotice("Condivisione creata. Il link è pronto per essere inviato.");
+      setNotice("Caricamento completato. Il file è online e il link è pronto per essere inviato.");
     } catch (e) {
       if (uploadId && !published) await call(`shares/${uploadId}`, 'DELETE').catch(() => {});
       setError((e as Error).message);
@@ -175,6 +175,8 @@ export default function AdminPanel({
   }
   function choose(f: File | null) {
     if (busy) return;
+    setLatest("");
+    setNotice("");
     if (f && (f.size > MAX_FILE || f.size === 0)) {
       setError(
         f.size === 0
@@ -496,7 +498,7 @@ export default function AdminPanel({
                 </strong>
                 <span>
                   {file
-                    ? `${size(file.size)} · ${t("Pronto per l’invio")}`
+                    ? `${size(file.size)} · ${t(uploadProgress !== null ? "Caricamento in corso" : "Selezionato, non ancora caricato")}`
                     : t("oppure selezionalo dal tuo dispositivo")}
                 </span>
                 <span className="small-button">
@@ -522,6 +524,18 @@ export default function AdminPanel({
                 <Icon name="file" size={13} />
                 {t("Documenti, archivi, immagini. Fino a 250 MB per file.")}
               </p>
+              {file && <div className="upload-status" role="status" aria-live="polite">
+                {uploadProgress === null ? <>
+                  <strong>{t('Il file è ancora sul tuo dispositivo.')}</strong>
+                  <p>{t('Imposta password e scadenza, poi premi “Carica e crea link” per avviare il trasferimento.')}</p>
+                </> : <>
+                  <strong>{uploadProgress === 100
+                    ? t('File trasferito. Verifica e creazione del link in corso…')
+                    : `${t('Caricamento…')} ${uploadProgress}%`}</strong>
+                  <progress className="upload-progress" value={uploadProgress} max={100} aria-label={t('Caricamento…')} />
+                  <p>{t('Mantieni aperta questa pagina fino alla conferma di completamento.')}</p>
+                </>}
+              </div>}
             </div>
             <div className="upload-settings">
               <div className="field-heading">
@@ -605,7 +619,7 @@ export default function AdminPanel({
                     ? uploadProgress === 100 ? t('Finalizzazione…') : `${t('Caricamento…')} ${uploadProgress}%`
                     : busy
                     ? t("Operazione in corso…")
-                    : t("Crea link di condivisione")}
+                    : t("Carica e crea link")}
                   <Icon name="arrow" size={18} />
                 </button>
                 <span>
@@ -613,10 +627,6 @@ export default function AdminPanel({
                   {t("Il link scadrà automaticamente")}
                 </span>
               </div>
-              {uploadProgress !== null && <div role="status" aria-live="polite">
-                <progress className="upload-progress" value={uploadProgress} max={100} aria-label={t('Caricamento…')} />
-                <p>{t('Mantieni aperta questa pagina fino alla creazione del link.')}</p>
-              </div>}
             </div>
           </form>
           {latest && (

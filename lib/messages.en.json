@@ -212,5 +212,13 @@
   "Mantieni aperta questa pagina fino alla creazione del link.": "Keep this page open until the link is ready.",
   "Caricamento non disponibile. Riprova.": "Upload unavailable. Please try again.",
   "Dimensione della parte non valida.": "Invalid upload part size.",
-  "Caricamento incompleto. Riprova.": "Upload incomplete. Please try again."
+  "Caricamento incompleto. Riprova.": "Upload incomplete. Please try again.",
+  "Caricamento completato. Il file è online e il link è pronto per essere inviato.": "Upload complete. The file is online and the link is ready to share.",
+  "Caricamento in corso": "Upload in progress",
+  "Selezionato, non ancora caricato": "Selected, not uploaded yet",
+  "Il file è ancora sul tuo dispositivo.": "The file is still on your device.",
+  "Imposta password e scadenza, poi premi “Carica e crea link” per avviare il trasferimento.": "Set the password and expiration, then press “Upload and create link” to start the transfer.",
+  "File trasferito. Verifica e creazione del link in corso…": "File transferred. Verifying and creating the link…",
+  "Mantieni aperta questa pagina fino alla conferma di completamento.": "Keep this page open until completion is confirmed.",
+  "Carica e crea link": "Upload and create link"
 }
