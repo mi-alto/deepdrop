@@ -17,9 +17,10 @@ import {
   setCookie,
   shareCookie,
 } from "@/lib/http";
-import { download, getShare } from "@/lib/store";
+import { download, downloadStream, getShare } from "@/lib/store";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 300;
 type Context = { params: Promise<{ id: string; action: string }> };
 async function handle(request: NextRequest, context: Context) {
   try {
@@ -60,21 +61,22 @@ async function handle(request: NextRequest, context: Context) {
     }
     if (!allowedShare(request, share))
       throw new HttpError(401, "Inserisci la password per scaricare il file.");
-    const bytes = await download(id);
+    const stream = share.chunkCount ? await downloadStream(share) : null;
+    const bytes = stream ? null : await download(id);
     // Ricontrolla dopo la lettura del file: una revoca concorrente blocca l'inizio del download.
     const current = await getShare(id);
     if (
-      !bytes ||
+      (!bytes && !stream) ||
       !current ||
       current.expiresAt <= Date.now() ||
       current.version !== share.version
     )
       throw new HttpError(404, "Questo link non è più disponibile.");
-    if (bytes.length !== current.size) throw new Error('Dimensione oggetto non valida');
-    return new NextResponse(new Uint8Array(bytes), {
+    if (bytes && bytes.length !== current.size) throw new Error('Dimensione oggetto non valida');
+    return new NextResponse(stream ?? new Uint8Array(bytes!), {
       headers: {
         "Content-Type": "application/octet-stream",
-        "Content-Length": String(bytes.length),
+        ...(bytes ? { "Content-Length": String(bytes.length) } : {}),
         "Content-Disposition": disposition(share.filename),
         "Cache-Control": "private, no-store",
         "X-Content-Type-Options": "nosniff",

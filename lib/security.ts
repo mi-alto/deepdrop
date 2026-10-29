@@ -8,7 +8,7 @@ import {
 import { promisify } from "node:util";
 import { shareAuthenticationTag } from './encryption';
 const scrypt = promisify(scryptCallback);
-export const MAX_FILE = 3 * 1024 * 1024;
+export { MAX_FILE } from './transfer';
 export const ID_RE = /^[A-Za-z0-9_-]{32}$/;
 export const SHARE_ID_RE = /^[A-Za-z0-9_-]{43}$/;
 export function newShareId() {
@@ -133,7 +133,7 @@ export class HttpError extends Error {
 }
 export async function boundedBody(request: Request, limit: number) {
   if (Number(request.headers.get("content-length")) > limit)
-    throw new HttpError(413, "Il file supera il limite di 3 MB.");
+    throw new HttpError(413, "Richiesta troppo grande.");
   const reader = request.body?.getReader();
   if (!reader) return new Uint8Array();
   const chunks: Uint8Array[] = [];

@@ -2,6 +2,7 @@
 import { useTranslation } from "./LanguageProvider";
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { Icon, Mark, TransferGraphic } from "./Interface";
+import { MAX_FILE, CHUNK_SIZE } from '@/lib/transfer';
 type Share = {
   id: string;
   filename: string;
@@ -38,6 +39,7 @@ export default function AdminPanel({
     [error, setError] = useState(""),
     [notice, setNotice] = useState(""),
     [busy, setBusy] = useState(false),
+    [uploadProgress, setUploadProgress] = useState<number | null>(null),
     [file, setFile] = useState<File | null>(null),
     [latest, setLatest] = useState(""),
     [loading, setLoading] = useState(initialAuth),
@@ -51,13 +53,13 @@ export default function AdminPanel({
     [now, setNow] = useState(0);
   const fileRef = useRef<HTMLInputElement>(null);
   const call = useCallback(
-    async (action: string, method = "GET", body?: FormData) => {
+    async (action: string, method = "GET", body?: FormData | Blob) => {
       const response = await fetch(`${base}/api/${action}`, {
         method,
         body,
         cache: "no-store",
       });
-      const data = await response.json();
+      const data = await response.json().catch(() => ({ error: 'Operazione non riuscita.' }));
       if (!response.ok) {
         if (response.status === 401 && action !== "login") setAuth(false);
         throw new Error(data.error || "Operazione non riuscita.");
@@ -101,16 +103,36 @@ export default function AdminPanel({
   }
   async function upload(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!file) return;
+    if (!file || busy) return;
     setError("");
     setNotice("");
     setBusy(true);
     const target = e.currentTarget;
+    let uploadId: string | null = null;
+    let published = false;
+    setUploadProgress(0);
     try {
       const data = new FormData(target);
-      data.set("file", file);
+      data.delete('file');
+      data.set('filename', file.name);
+      data.set('size', String(file.size));
       if (!protect) data.set("password", "");
-      const result = await call("shares", "POST", data);
+      const started = await call('uploads', 'POST', data);
+      uploadId = started.id;
+      for (let offset = 0, index = 0; offset < file.size; offset += CHUNK_SIZE, index++) {
+        const part = file.slice(offset, offset + CHUNK_SIZE);
+        // Identical parts can safely be retried after a lost response.
+        for (let attempt = 0; ; attempt++) {
+          try { await call(`uploads/${uploadId}/${index}`, 'PUT', part); break; }
+          catch (error) {
+            if (attempt === 2) throw error;
+            await new Promise(resolve => setTimeout(resolve, 500 * (attempt + 1)));
+          }
+        }
+        setUploadProgress(Math.floor(Math.min(offset + part.size, file.size) / file.size * 100));
+      }
+      const result = await call(`uploads/${uploadId}/complete`, 'POST');
+      published = true;
       setLatest(`${window.location.origin}/s/${result.share.id}`);
       target.reset();
       setFile(null);
@@ -120,8 +142,10 @@ export default function AdminPanel({
       await refresh();
       setNotice("Condivisione creata. Il link è pronto per essere inviato.");
     } catch (e) {
+      if (uploadId && !published) await call(`shares/${uploadId}`, 'DELETE').catch(() => {});
       setError((e as Error).message);
     } finally {
+      setUploadProgress(null);
       setBusy(false);
     }
   }
@@ -150,11 +174,12 @@ export default function AdminPanel({
     }
   }
   function choose(f: File | null) {
-    if (f && (f.size > 3 * 1024 * 1024 || f.size === 0)) {
+    if (busy) return;
+    if (f && (f.size > MAX_FILE || f.size === 0)) {
       setError(
         f.size === 0
           ? "Il file è vuoto. Scegli un altro documento."
-          : "Il limite è 3 MB per file.",
+          : "Il limite è 250 MB per file.",
       );
       if (fileRef.current) fileRef.current.value = "";
       setFile(null);
@@ -440,10 +465,11 @@ export default function AdminPanel({
             <div className="upload-file-area">
               <div className="field-heading">
                 <span>{t("FILE DA CONDIVIDERE")}</span>
-                <span>MAX 3 MB</span>
+                <span>MAX 250 MB</span>
               </div>
               <button
                 type="button"
+                disabled={busy}
                 className={`dropzone ${file ? "selected" : ""} ${dragging ? "dragging" : ""}`}
                 onClick={() => fileRef.current?.click()}
                 onDragOver={(e) => {
@@ -488,12 +514,13 @@ export default function AdminPanel({
                 aria-label={t("Scegli il file da condividere")}
                 name="file"
                 type="file"
+                disabled={busy}
                 tabIndex={-1}
                 onChange={(e) => choose(e.target.files?.[0] || null)}
               />
               <p className="file-area-note">
                 <Icon name="file" size={13} />
-                {t("Documenti, archivi, immagini. Fino a 3 MB per file.")}
+                {t("Documenti, archivi, immagini. Fino a 250 MB per file.")}
               </p>
             </div>
             <div className="upload-settings">
@@ -574,7 +601,9 @@ export default function AdminPanel({
               )}
               <div className="transfer-submit">
                 <button disabled={busy || !file} className="button">
-                  {busy
+                  {uploadProgress !== null
+                    ? uploadProgress === 100 ? t('Finalizzazione…') : `${t('Caricamento…')} ${uploadProgress}%`
+                    : busy
                     ? t("Operazione in corso…")
                     : t("Crea link di condivisione")}
                   <Icon name="arrow" size={18} />
@@ -584,6 +613,10 @@ export default function AdminPanel({
                   {t("Il link scadrà automaticamente")}
                 </span>
               </div>
+              {uploadProgress !== null && <div role="status" aria-live="polite">
+                <progress className="upload-progress" value={uploadProgress} max={100} aria-label={t('Caricamento…')} />
+                <p>{t('Mantieni aperta questa pagina fino alla creazione del link.')}</p>
+              </div>}
             </div>
           </form>
           {latest && (

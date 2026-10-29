@@ -73,6 +73,14 @@ The code checks both `rateLimited` and SDK errors (`not-found`, `blocked`), sets
 
 A crash between writing the file and its manifest can leave an inaccessible private orphan. Remove it manually from Vercel storage if necessary. The cron job cleans expired manifests and incomplete revocations; it does not scan for orphaned files. Never commit confidential files to the repository.
 
+## Large files
+
+The console accepts files up to 250 MiB (displayed as MB), including 103 MB files. Uploads use sequential requests of at most 3 MiB, below Vercel's 4.5 MB request limit. Each part is encrypted and authenticated independently at `deepdrop/chunk/<id>/<index>`. An encrypted completion marker at `deepdrop/complete/<id>` makes the share visible only after every part has been checked. Parts are immutable; identical retries are safe. Existing single-object shares remain readable.
+
+Downloads stream authenticated parts with bounded server memory, preserving password checks, expiration and revocation. Streaming responses avoid the buffered response size limit; see [Vercel's guidance](https://vercel.com/kb/guide/how-to-bypass-vercel-body-size-limit-serverless-functions). Enable Fluid Compute on Vercel: upload, download and cleanup routes request a 300-second function duration. Keep the upload page open until the link appears. Uploads must finish within one hour; the chosen link expiration starts when the upload begins. Interrupted uploads are hidden and swept by the existing cleanup job after the upload deadline plus five minutes for in-flight requests. Aborting denies access immediately; storage reclamation can wait for that sweep. Each part adds Blob operations and transfer usage.
+
+`npm run test:smoke` transfers an actual 103 MiB file and checks the SHA-256 digest of its streamed download. Before relying on a deployment, repeat an upload/download on Vercel to verify Blob access, streaming and function-duration configuration with the live platform.
+
 ## Encryption key, backups, and compatibility
 
 Encryption is **application-level encryption at rest, not end-to-end encryption**. The server decrypts files after checking access. A compromised runtime or environment can expose data and keys. Storage alone contains authenticated ciphertext but still exposes paths, approximate sizes, and operational information. Encryption does not prevent someone controlling storage from deleting objects or restoring older valid copies.

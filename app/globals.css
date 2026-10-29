@@ -1287,6 +1287,9 @@ body:has(.dashboard) footer {
   color: #b9a682;
   line-height: 1.6;
 }
+.upload-progress {
+  width: 100%;
+}
 .transfer-submit {
   margin-top: auto;
   padding-top: 20px;

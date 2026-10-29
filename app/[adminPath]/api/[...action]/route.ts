@@ -15,6 +15,7 @@ import {
   text,
   verifyPassword,
   isPasswordHash,
+  boundedBody,
 } from "@/lib/security";
 import {
   ADMIN_COOKIE,
@@ -24,9 +25,11 @@ import {
   requireAdmin,
   setCookie,
 } from "@/lib/http";
-import { createShare, deleteShare, listShares, createAdminSession, deleteAdminSession } from "@/lib/store";
+import { createShare, deleteShare, listShares, createAdminSession, deleteAdminSession, beginUpload, uploadPart, completeUpload } from "@/lib/store";
+import { CHUNK_SIZE } from '@/lib/transfer';
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 300;
 type Context = { params: Promise<{ adminPath: string; action: string[] }> };
 function publicShare(s: Awaited<ReturnType<typeof listShares>>[number]) {
   return {
@@ -77,11 +80,26 @@ async function handle(request: NextRequest, context: Context) {
     }
     if (action === "shares" && request.method === "GET")
       return json({ shares: (await listShares()).map(publicShare) });
-    if (action === "shares" && request.method === "POST") {
-      const data = await form(request, MAX_FILE + 64 * 1024);
+    if (params.action[0] === 'uploads' && params.action.length === 3) {
+      const [, id, part] = params.action;
+      if (!validShareId(id)) throw new HttpError(400, 'Link non valido.');
+      if (part === 'complete' && request.method === 'POST')
+        return json({ share: publicShare(await completeUpload(id)) }, 201);
+      if (/^(0|[1-9][0-9]*)$/.test(part) && request.method === 'PUT') {
+        await uploadPart(id, Number(part), await boundedBody(request, CHUNK_SIZE));
+        return json({ ok: true });
+      }
+    }
+    if ((action === "shares" || action === 'uploads') && request.method === "POST") {
+      const chunked = action === 'uploads';
+      const data = await form(request, chunked ? 8192 : CHUNK_SIZE + 64 * 1024);
       const file = data.get("file");
-      if (!(file instanceof File) || !file.size || file.size > MAX_FILE)
+      if (!chunked && (!(file instanceof File) || !file.size || file.size > CHUNK_SIZE))
         throw new HttpError(400, "Scegli un file da 1 byte a 3 MB.");
+      const size = chunked ? Number(text(data, 'size', 16)) : (file as File).size;
+      const filename = chunked ? text(data, 'filename', 1024) : (file as File).name;
+      if (!Number.isSafeInteger(size) || size < 1 || size > MAX_FILE)
+        throw new HttpError(400, 'Il limite è 250 MB per file.');
       const password = text(data, "password", 256);
       if (password && password.length < 12)
         throw new HttpError(400, "La password deve avere almeno 12 caratteri.");
@@ -90,14 +108,18 @@ async function handle(request: NextRequest, context: Context) {
         throw new HttpError(400, "Scadenza non valida.");
       const share = {
         id: newShareId(),
-        filename: safeFilename(file.name),
-        size: file.size,
+        filename: safeFilename(filename),
+        size,
         createdAt: Date.now(),
         expiresAt: Date.now() + hours * 3600000,
         passwordHash: password ? await hashPassword(password) : "",
         version: newId(),
       };
-      await createShare(share, new Uint8Array(await file.arrayBuffer()));
+      if (chunked) {
+        await beginUpload(share);
+        return json({ id: share.id, chunkSize: CHUNK_SIZE }, 201);
+      }
+      await createShare(share, new Uint8Array(await (file as File).arrayBuffer()));
       return json({ share: publicShare(share) }, 201);
     }
     if (
@@ -115,4 +137,4 @@ async function handle(request: NextRequest, context: Context) {
     return errorResponse(e);
   }
 }
-export { handle as GET, handle as POST, handle as DELETE };
+export { handle as GET, handle as POST, handle as DELETE, handle as PUT };

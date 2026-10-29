@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { randomBytes, scryptSync, createCipheriv, createDecipheriv } from 'node:crypto';
+import { randomBytes, scryptSync, createCipheriv, createDecipheriv, createHash } from 'node:crypto';
 import { spawn } from 'node:child_process';
 import { mkdtemp, readFile, writeFile, rm } from 'node:fs/promises';
 import { createServer } from 'node:net';
@@ -176,6 +176,43 @@ try {
   await expectStatus(await request(`${admin}/api/shares`, {
     method: 'POST', headers: { Origin: origin, Cookie: adminCookie }, body: oversized,
   }), 413, 'Oversized request rejected');
+  // Transfer an actual 103 MiB payload through bounded HTTP requests, then
+  // verify the streamed response without buffering the whole file in the test.
+  const largeSize = 103 * 1024 * 1024;
+  const chunkSize = 3 * 1024 * 1024;
+  const headers = { Origin: origin, Cookie: adminCookie };
+  const largeMetadata = () => form({ filename: '103-MB.zip', size: String(largeSize), hours: '24', password: 'large-password-123' });
+  await expectStatus(await request(`${admin}/api/uploads`, { method: 'POST', headers: { Origin: origin }, body: largeMetadata() }), 401, 'Chunk initialization needs admin');
+  await expectStatus(await request(`${admin}/api/uploads`, { method: 'POST', headers: { Cookie: adminCookie }, body: largeMetadata() }), 403, 'Chunk initialization needs origin');
+  await expectStatus(await request(`${admin}/api/uploads`, { method: 'POST', headers, body: form({ filename: 'oversized.zip', size: String(250 * 1024 * 1024 + 1), hours: '24', password: '' }) }), 400, 'Overall file limit enforced');
+  const start = await expectStatus(await request(`${admin}/api/uploads`, { method: 'POST', headers, body: largeMetadata() }), 201, 'Start 103 MB upload');
+  const { id: largeId } = await start.json();
+  await expectStatus(await request(`/api/share/${largeId}/download`), 404, 'Incomplete upload cannot download');
+  await expectStatus(await request(`${admin}/api/uploads/${largeId}/complete`, { method: 'POST', headers }), 409, 'Incomplete upload cannot publish');
+  await expectStatus(await request(`${admin}/api/uploads/${largeId}/0`, { method: 'PUT', headers: { Origin: origin }, body: new Uint8Array(1) }), 401, 'Parts require authentication');
+  await expectStatus(await request(`${admin}/api/uploads/${largeId}/0`, { method: 'PUT', headers: { Cookie: adminCookie }, body: new Uint8Array(1) }), 403, 'Parts require origin');
+  await expectStatus(await request(`${admin}/api/uploads/${largeId}/0`, { method: 'PUT', headers, body: new Uint8Array(chunkSize + 1) }), 413, 'Oversized part rejected');
+  const expectedHash = createHash('sha256');
+  for (let offset = 0, index = 0; offset < largeSize; offset += chunkSize, index++) {
+    const bytes = randomBytes(Math.min(chunkSize, largeSize - offset));
+    expectedHash.update(bytes);
+    await expectStatus(await request(`${admin}/api/uploads/${largeId}/${index}`, { method: 'PUT', headers, body: bytes }), 200, `Upload part ${index}`);
+    if (index === 0) await expectStatus(await request(`${admin}/api/uploads/${largeId}/${index}`, { method: 'PUT', headers, body: bytes }), 200, 'Retry identical part');
+  }
+  await expectStatus(await request(`${admin}/api/uploads/${largeId}/complete`, { method: 'POST', headers }), 201, 'Publish 103 MB file');
+  await expectStatus(await request(`/api/share/${largeId}/download`), 401, 'Large file password enforced');
+  const largeUnlock = await expectStatus(await request(`/api/share/${largeId}/unlock`, { method: 'POST', headers: { Origin: origin }, body: form({ password: 'large-password-123' }) }), 200, 'Unlock large file');
+  const largeResponse = await request(`/api/share/${largeId}/download`, { headers: { Cookie: cookie(largeUnlock) } });
+  assert.equal(largeResponse.status, 200);
+  const actualHash = createHash('sha256');
+  let receivedSize = 0;
+  for await (const bytes of largeResponse.body) { actualHash.update(bytes); receivedSize += bytes.length; }
+  assert.equal(receivedSize, largeSize);
+  assert.equal(actualHash.digest('hex'), expectedHash.digest('hex'), '103 MB download matches every uploaded byte');
+  await expectStatus(await request(`${admin}/api/shares/${largeId}`, { method: 'DELETE', headers }), 200, 'Revoke large file');
+  await expectStatus(await request(`/api/share/${largeId}/download`, { headers: { Cookie: cookie(largeUnlock) } }), 404, 'Large file revoked');
+  await assert.rejects(readFile(join(storage, 'deepdrop/chunk', largeId, '0')), { code: 'ENOENT' });
+  console.log('103 MiB upload and streamed download passed with matching SHA-256, password protection, retry and revocation.');
   const logout = await expectStatus(await request(`${admin}/api/logout`, {
     method: 'POST', headers: { Origin: origin, Cookie: adminCookie },
   }), 200, 'Logout');

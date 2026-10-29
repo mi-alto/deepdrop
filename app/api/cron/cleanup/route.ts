@@ -3,6 +3,7 @@ import { json, errorResponse } from "@/lib/http";
 import { cleanup } from "@/lib/store";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
+export const maxDuration = 300;
 export async function GET(request: Request) {
   const secret = process.env.CRON_SECRET;
   const expected = Buffer.from(`Bearer ${secret || ""}`);

@@ -204,5 +204,13 @@
   "senza complicazioni.": "without the hassle.",
   "Il sistema di sharing sviluppato da Deep4IT.": "The file-sharing system developed by Deep4IT.",
   "Hai ricevuto un link?": "Received a link?",
-  "Aprilo per scaricare il file.": "Open it to download your file."
+  "Aprilo per scaricare il file.": "Open it to download your file.",
+  "Il limite è 250 MB per file.": "The limit is 250 MB per file.",
+  "Documenti, archivi, immagini. Fino a 250 MB per file.": "Documents, archives, images. Up to 250 MB per file.",
+  "Caricamento…": "Uploading…",
+  "Finalizzazione…": "Finalizing…",
+  "Mantieni aperta questa pagina fino alla creazione del link.": "Keep this page open until the link is ready.",
+  "Caricamento non disponibile. Riprova.": "Upload unavailable. Please try again.",
+  "Dimensione della parte non valida.": "Invalid upload part size.",
+  "Caricamento incompleto. Riprova.": "Upload incomplete. Please try again."
 }
